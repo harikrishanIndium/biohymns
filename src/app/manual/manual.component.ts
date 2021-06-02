@@ -69,18 +69,19 @@ export class ManualComponent implements OnInit {
           instance.setTheme('dark');
           /* contaxt menu */
           //working add new 
-          instance.contextMenuPopup.add([{
+          instance.contextMenuPopup.update([{
             type: 'actionButton',
             img: 'path/to/image',
             onClick: () => {
               alert('Hello world simple!');
             }
-          },{
-            element:'textRedactTool',
-            dataElement: 'textRedactToolButton'
           }]);
+          instance.textPopup.update([
+            {dataElement: "copyTextButton"},
+            {dataElement: "textRedactToolButton"}
+          ])
           console.log(instance.textPopup.getItems())
-          console.log("items are in contaxt menu ",    instance.annotationPopup.getItems()          )
+          console.log("items are in contaxt menu ",    instance.contextMenuPopup.getItems()          )
     });
   }
 
