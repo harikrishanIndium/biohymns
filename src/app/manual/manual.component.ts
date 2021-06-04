@@ -76,7 +76,7 @@ export class ManualComponent implements OnInit {
           type: 'actionButton',
           img: 'path/to/image',
           onClick: () => {
-            alert('Hello world simple!');
+            instance.downloadPdf()
           }
         }]);
         instance.textPopup.update([
