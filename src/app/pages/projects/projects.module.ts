@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProjectsComponent } from './projects.component';
 import { MaterialModule } from 'src/app/shared/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { FileUploadModule } from 'ng2-file-upload';
 
 
 @NgModule({
@@ -14,7 +14,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    FileUploadModule
   ],
   exports:[ProjectsComponent],
   schemas:[CUSTOM_ELEMENTS_SCHEMA]

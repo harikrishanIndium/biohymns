@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import{FormsModule} from '@angular/forms'
+import { FormsModule } from '@angular/forms'
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ManualModule } from './manual/manual.module';
@@ -13,11 +13,15 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { ProjectsModule } from './pages/projects/projects.module';
 import { MaterialModule } from './shared/material.module';
+import { MatDialogModule } from '@angular/material/dialog';
+
+
+import { from } from 'rxjs';
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
-    MainLayoutComponent    
+    MainLayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -25,16 +29,17 @@ import { MaterialModule } from './shared/material.module';
     FormsModule,
     BrowserAnimationsModule,
     MaterialModule,
+    MatDialogModule,
     /* user modules */
 
     VairaManualModule,
     ManualModule,
     LoginModule,
     DashboardModule,
-    ProjectsModule
+    ProjectsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
-  schemas:[CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }
