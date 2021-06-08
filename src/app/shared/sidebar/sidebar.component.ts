@@ -1,12 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { onSideNavChange, animateText } from '../../shared/animation'
-import { FormControl } from '@angular/forms';
-import { MatDrawer } from '@angular/material/sidenav';
-interface Page {
-  link: string;
-  name: string;
-  icon: string;
-}
 
 @Component({
   selector: 'app-sidebar',
@@ -19,10 +12,10 @@ export class SidebarComponent implements OnInit,OnChanges {
   public linkText: boolean = false;
   @Input("navOpen") navOpen;
   @ViewChild("drawer") public drawer;
-  public pages: Page[] = [
-    {name: 'Inbox', link:'some-link', icon: 'inbox'},
-    {name: 'Starred', link:'some-link', icon: 'star'},
-    {name: 'Send email', link:'some-link', icon: 'send'},
+  public pages = [
+    {name: 'Dashboard', link:'dashboard', icon: 'dashboard'},
+    {name: 'Projects', link:'projects', icon: 'domain'},
+    // {name: 'Files', link:'some-link', icon: 'send'},
   ]
 
   constructor() { }

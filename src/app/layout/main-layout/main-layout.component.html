@@ -1,10 +1,9 @@
 <section class="main-layout row col-lg-12">
-    <div class="col-lg-1">
-        <button type="button" mat-button (click)="onNavOpenChange()">
-            >
+    
+    <div class="col-lg-12">
+        <button type="button" mat-button (click)="onNavOpenChange()" class="pb-1 nav-button squre-btn" [class.background-gray]="navOpen" [class.text-white]="navOpen">
+            <mat-icon>menu</mat-icon>
         </button>
-    </div>
-    <div class="col-lg-11">
         logo and content
     </div>
 <app-sidebar [navOpen]="navOpen"></app-sidebar>

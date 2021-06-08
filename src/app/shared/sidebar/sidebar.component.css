@@ -2,7 +2,10 @@
     height: 100vh;
     overflow: scrollS;
 }
-
+.sidenav{
+    min-width:80px;
+    color:#ffffff;
+}
   
 .jim {
     width: 30px;
