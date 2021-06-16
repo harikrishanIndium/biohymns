@@ -14,9 +14,7 @@ import { MainLayoutComponent } from './layout/main-layout/main-layout.component'
 import { ProjectsModule } from './pages/projects/projects.module';
 import { MaterialModule } from './shared/material.module';
 import { MatDialogModule } from '@angular/material/dialog';
-
-
-import { from } from 'rxjs';
+import { PdflibModule } from './pdflib/pdflib.module';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,6 +34,7 @@ import { from } from 'rxjs';
     ManualModule,
     LoginModule,
     DashboardModule,
+    PdflibModule,
     ProjectsModule,
   ],
   providers: [],

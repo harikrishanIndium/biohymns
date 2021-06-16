@@ -1,10 +1,15 @@
-<section class="main-layout row col-lg-12">
-    
-    <div class="col-lg-12">
+<section class="main-layout p-0 col-lg-12">    
+    <div class="p-0 col-lg-12">
         <button type="button" mat-button (click)="onNavOpenChange()" class="pb-1 nav-button squre-btn" [class.background-gray]="navOpen" [class.text-white]="navOpen">
             <mat-icon>menu</mat-icon>
         </button>
-        logo and content
+        <div class="top-Nav">
+            <nav>  
+                <a routerLink="dashboard" routerLinkActive="active">Dashboard</a> |  
+                <a routerLink="projects" routerLinkActive="active">Projects</a> |
+                <a>Logout</a>
+             </nav>  
+        </div>
     </div>
 <app-sidebar [navOpen]="navOpen"></app-sidebar>
 </section>

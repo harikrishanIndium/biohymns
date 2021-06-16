@@ -1,2 +1,17 @@
 .nav-button{background-color: #cedc00;}
-.squre-btn{border-radius: 0%; width: 80px; height: 65px;}
+.squre-btn{border-radius: 0%; width: 80px; height: 65px;border-bottom: 3px solid #3a5382;}
+.top-Nav{border-bottom: 3px solid #3a5382;float: right;width: calc(100% - 80px);height: 65px !important;}
+.top-Nav nav {
+    padding: 1em;
+    text-align: right;
+}
+.top-Nav nav a {
+    padding: 1em;
+    color: #53565b;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 1.25rem;
+    position: relative;
+}
+.top-Nav nav a:hover { text-decoration: underline;}
+.top-Nav nav a.active {color:#840b55 !important;}

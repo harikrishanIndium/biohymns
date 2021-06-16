@@ -1,19 +1,18 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoginComponent } from './login.component';
+import { FileComponent } from './file.component';
+import { MaterialModule } from 'src/app/shared/material.module';
 import { FormsModule } from '@angular/forms';
-import { MaterialModule } from '../shared/material.module';
-
-
-
 @NgModule({
-  declarations: [LoginComponent],
+  declarations: [
+    FileComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
     MaterialModule
   ],
-  exports:[LoginComponent],
+  exports:[FileComponent],
   schemas:[CUSTOM_ELEMENTS_SCHEMA]
 })
-export class LoginModule { }
+export class FileModule { }
