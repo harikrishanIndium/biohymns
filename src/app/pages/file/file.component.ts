@@ -10,7 +10,7 @@ export class FileComponent implements OnInit {
   @ViewChild('viewer', { static: false }) viewer: any;
 
   constructor(private service:RepositoryService) { }
-
+  redactionResults:any = [];
   ngOnInit(): void {
    
   }
@@ -24,7 +24,7 @@ export class FileComponent implements OnInit {
     WebViewer({
       path: '../assets/lib',
       // initialDoc: '../assets/files/webviewer-demo-annotated.pdf',
-      initialDoc: '../assets/files/sample.pdf',
+      initialDoc: '../assets/files/370941-ITD_protocol_V5.pdf',
       // initialDoc: this.url,
       enableRedaction: true,
       licenseKey: "25R4N365K716RZAXK9Y2YCM021BW48H0I0S",
@@ -33,7 +33,7 @@ export class FileComponent implements OnInit {
       .then(instance => {
         const { annotManager, docViewer, Annotations, CoreControls } = instance;
         const annotHistoryManager = docViewer.getAnnotationHistoryManager();
-        console.log("user", annotManager.getDisplayAuthor(annotManager))
+        // console.log("user", annotManager.getDisplayAuthor(annotManager))
         instance.setTheme('dark');
         /* hide the tool group */
         instance.disableElements(['toolbarGroup-View']);
@@ -55,13 +55,23 @@ export class FileComponent implements OnInit {
 
               console.log("redaction list", redactionList)
               console.log(JSON.stringify(redactionList))
+         console.log("cc",docViewer.getPageHeight(1))
+              let results:any = [];
               redactionList.map(dat =>{
-                console.log("page", dat['XB'])
-                console.log("Co ordi", dat['Nb'])
+                let t  = {
+                  pageNumber:dat['XB'],
+                  pageHeight:docViewer.getPageHeight(dat['XB']),
+                  pageWidth:docViewer.getPageWidth(dat['XB']),
+                  redactions:dat['Nb']
+                }
+                results.push(t)
+                // console.log("page", dat['XB'])
+                // console.log("Co ordi", dat['Nb'])
               })
-              console.log("axis", redactionList[0]['Nb'])
-              console.log("axis", redactionList[0]['XB'])
-
+              // console.log("axis", redactionList[0]['Nb'])
+              // console.log("axis", redactionList[0]['XB'])
+              console.log("results ",results)
+              this.redactionResults = results;
               // instance.downloadPdf({filename:'test.pdf',includeAnnotations:true,})
             }
           },
@@ -128,6 +138,7 @@ export class FileComponent implements OnInit {
 
         annotManager.setAnnotationDisplayAuthorMap((annotation) => {
           console.log("annotation ", annotation )
+
           if (annotation.Id === '1') {
             return 'John';
           } else {
@@ -135,6 +146,7 @@ export class FileComponent implements OnInit {
           }
         });
 
+        /* user defined redaction
 
         docViewer.on('documentLoaded', () => {
           let redactions:any = [];
@@ -146,7 +158,12 @@ export class FileComponent implements OnInit {
           const redactAnnotations = redactions
           annotManager.addAnnotations(redactAnnotations);
         })
-         
+        */
+        docViewer.on('documentLoaded', () => {
+
+         console.log("cc",docViewer.getPageHeight(1))
+         console.log("cc",docViewer.getPageWidth(1))
+        });
       });
   }
   url: any;
