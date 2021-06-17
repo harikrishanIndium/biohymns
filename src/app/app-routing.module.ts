@@ -8,7 +8,8 @@ import { ManualComponent } from './manual/manual.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
 import { PdflibComponent } from './pdflib/pdflib.component';
 import { VairaManualComponent } from './vaira-manual/vaira-manual.component';
-
+import { FileUploadComponent } from './pages/file-upload/file-upload.component';
+import { FileComponent } from './pages/file/file.component';
 const routes: Routes = [
   {
     path: 'old',
@@ -38,6 +39,14 @@ const routes: Routes = [
       {
         path:"sample",
         component: PdflibComponent
+      },
+      {
+        path:"file-upload",
+        component: FileUploadComponent
+      },
+      {
+        path:"redact-file",
+        component: FileComponent
       }
     ]
   },

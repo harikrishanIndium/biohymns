@@ -15,4 +15,7 @@ export class DashboardComponent implements OnInit {
   gotToProjects(){
     this.router.navigateByUrl("projects")
   }
+  fileupload(){
+    this.router.navigateByUrl("file-upload")
+  }
 }

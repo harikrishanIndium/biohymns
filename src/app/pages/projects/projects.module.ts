@@ -5,7 +5,7 @@ import { MaterialModule } from 'src/app/shared/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FileUploadModule } from 'ng2-file-upload';
 import { FileModule } from '../file/file.module';
-
+import { FileUploadsModule } from '../file-upload/file-upload.module'
 
 @NgModule({
   declarations: [
@@ -17,7 +17,8 @@ import { FileModule } from '../file/file.module';
     ReactiveFormsModule,
     MaterialModule,
     FileUploadModule,
-    FileModule
+    FileModule,
+    FileUploadsModule
   ],
   exports:[ProjectsComponent],
   schemas:[CUSTOM_ELEMENTS_SCHEMA]

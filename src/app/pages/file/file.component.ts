@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import WebViewer from '@pdftron/webviewer';
-
+import { RepositoryService } from '../../service/repository.service';
 @Component({
   selector: 'app-file',
   templateUrl: './file.component.html',
@@ -9,16 +9,18 @@ import WebViewer from '@pdftron/webviewer';
 export class FileComponent implements OnInit {
   @ViewChild('viewer', { static: false }) viewer: any;
 
-  constructor() { }
+  constructor(private service:RepositoryService) { }
 
   ngOnInit(): void {
+   
   }
   ngAfterViewInit(){
+   
     this.showPDF();
   }
   showPDF() {
     console.log("view", this.viewer);
-    this.input = document.getElementById('file_upload');
+    this.input = this.service.getOption;
     WebViewer({
       path: '../assets/lib',
       // initialDoc: '../assets/files/webviewer-demo-annotated.pdf',

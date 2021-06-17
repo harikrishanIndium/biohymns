@@ -15,11 +15,13 @@ import { ProjectsModule } from './pages/projects/projects.module';
 import { MaterialModule } from './shared/material.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PdflibModule } from './pdflib/pdflib.module';
+import { RepositoryService } from './service/repository.service';
+
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
-    MainLayoutComponent
+    MainLayoutComponent,
   ],
   imports: [
     BrowserModule,
@@ -37,7 +39,7 @@ import { PdflibModule } from './pdflib/pdflib.module';
     PdflibModule,
     ProjectsModule,
   ],
-  providers: [],
+  providers: [RepositoryService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
