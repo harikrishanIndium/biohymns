@@ -9,23 +9,41 @@ import { RepositoryService } from '../../service/repository.service';
 export class FileComponent implements OnInit {
   @ViewChild('viewer', { static: false }) viewer: any;
 
-  constructor(private service:RepositoryService) { }
-  redactionResults:any = [];
+  constructor(private service: RepositoryService) { }
+  redactionResults: any = [];
   ngOnInit(): void {
-   
+
   }
-  ngAfterViewInit(){
-   
+  ngAfterViewInit() {
+
     this.showPDF();
   }
+
   showPDF() {
+
     console.log("view", this.viewer);
-    this.input = this.service.getOption;
+    this.input = this.service.getOption();
+
+
+    function base64ToBlob(base64) {
+      var arr = base64.split(',');
+      var mime = arr[0].match(/:(.*?);/)[1];
+      var bstr = window.atob(arr[1]);
+      var n = bstr.length;
+      var u8arr = new Uint8Array(n);
+
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], {
+        type: mime
+      });
+    };
+
     WebViewer({
       path: '../assets/lib',
       // initialDoc: '../assets/files/webviewer-demo-annotated.pdf',
-      initialDoc: '../assets/files/370941-ITD_protocol_V5.pdf',
-      // initialDoc: this.url,
+      // initialDoc: '../assets/files/370941-ITD_protocol_V5.pdf',
       enableRedaction: true,
       licenseKey: "25R4N365K716RZAXK9Y2YCM021BW48H0I0S",
 
@@ -34,6 +52,7 @@ export class FileComponent implements OnInit {
         const { annotManager, docViewer, Annotations, CoreControls } = instance;
         const annotHistoryManager = docViewer.getAnnotationHistoryManager();
         // console.log("user", annotManager.getDisplayAuthor(annotManager))
+        instance.loadDocument(base64ToBlob(this.input.result), { filename: 'myfile.pdf' });
         instance.setTheme('dark');
         /* hide the tool group */
         instance.disableElements(['toolbarGroup-View']);
@@ -55,14 +74,14 @@ export class FileComponent implements OnInit {
 
               console.log("redaction list", redactionList)
               console.log(JSON.stringify(redactionList))
-         console.log("cc",docViewer.getPageHeight(1))
-              let results:any = [];
-              redactionList.map(dat =>{
-                let t  = {
-                  pageNumber:dat['XB'],
-                  pageHeight:docViewer.getPageHeight(dat['XB']),
-                  pageWidth:docViewer.getPageWidth(dat['XB']),
-                  redactions:dat['Nb']
+              console.log("cc", docViewer.getPageHeight(1))
+              let results: any = [];
+              redactionList.map(dat => {
+                let t = {
+                  pageNumber: dat['XB'],
+                  pageHeight: docViewer.getPageHeight(dat['XB']),
+                  pageWidth: docViewer.getPageWidth(dat['XB']),
+                  redactions: dat['Nb']
                 }
                 results.push(t)
                 // console.log("page", dat['XB'])
@@ -70,19 +89,19 @@ export class FileComponent implements OnInit {
               })
               // console.log("axis", redactionList[0]['Nb'])
               // console.log("axis", redactionList[0]['XB'])
-              console.log("results ",results)
+              console.log("results ", results)
               this.redactionResults = results;
               // instance.downloadPdf({filename:'test.pdf',includeAnnotations:true,})
             }
           },
-          { dataElement:"annotationRedactButton"}
+          { dataElement: "annotationRedactButton" }
         ]);
         instance.textPopup.update([
           { dataElement: "copyTextButton" },
           { dataElement: "textRedactToolButton" },
         ])
-        
-/* ---------------------------------------------------------------------------------------------- */
+
+        /* ---------------------------------------------------------------------------------------------- */
         const { Tools } = instance;
         instance.setToolMode(Tools.ToolNames.REDACTION);
         // instance.enableFeatures([instance.Feature.Redaction]);
@@ -110,7 +129,7 @@ export class FileComponent implements OnInit {
               dataElement: 'alertButton',
               hidden: ['mobile']
             },
-            {type: "spacer", hidden:['mobile']},
+            { type: "spacer", hidden: ['mobile'] },
             {
               dataElement: "searchButton",
               element: "searchPanel",
@@ -128,16 +147,16 @@ export class FileComponent implements OnInit {
             }
           ])
           header.getHeader('toolbarGroup-Edit').update([
-            {type: "spacer", hidden:['mobile']},
-            {type: "actionButton", dataElement: "redoButton", title: "action.redo", img: "icon-operation-redo",onClick: () => {annotHistoryManager.redo();}},
-            {type: "actionButton", dataElement: "undoButton", title: "action.undo", img: "icon-operation-undo",onClick: () => {annotHistoryManager.undo();}},
-            {type: "toolGroupButton", toolGroup: "redactionTools", dataElement: "redactionToolGroupButton", title: "annotation.redact", showColor: "never"},
-            {type: "spacer", hidden:['mobile']}
-          ])          
+            { type: "spacer", hidden: ['mobile'] },
+            { type: "actionButton", dataElement: "redoButton", title: "action.redo", img: "icon-operation-redo", onClick: () => { annotHistoryManager.redo(); } },
+            { type: "actionButton", dataElement: "undoButton", title: "action.undo", img: "icon-operation-undo", onClick: () => { annotHistoryManager.undo(); } },
+            { type: "toolGroupButton", toolGroup: "redactionTools", dataElement: "redactionToolGroupButton", title: "annotation.redact", showColor: "never" },
+            { type: "spacer", hidden: ['mobile'] }
+          ])
         });
 
         annotManager.setAnnotationDisplayAuthorMap((annotation) => {
-          console.log("annotation ", annotation )
+          console.log("annotation ", annotation)
 
           if (annotation.Id === '1') {
             return 'John';
@@ -161,8 +180,8 @@ export class FileComponent implements OnInit {
         */
         docViewer.on('documentLoaded', () => {
 
-         console.log("cc",docViewer.getPageHeight(1))
-         console.log("cc",docViewer.getPageWidth(1))
+          console.log("cc", docViewer.getPageHeight(1))
+          console.log("cc", docViewer.getPageWidth(1))
         });
       });
   }
@@ -173,7 +192,7 @@ export class FileComponent implements OnInit {
 
     var reader = new FileReader();
     reader.readAsDataURL(fileToRead);
-   
+
     // attach event, that will be fired, when read is end
     reader.onload = (_event) => {
       this.url = reader.result;
@@ -184,3 +203,7 @@ export class FileComponent implements OnInit {
     reader.readAsText(fileToRead);
   }
 }
+function base64ToBlob(input: any): string | File | Blob | import("@pdftron/webviewer").CoreControls.Document | import("@pdftron/webviewer").PDFNet.PDFDoc {
+  throw new Error('Function not implemented.');
+}
+

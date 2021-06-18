@@ -10,7 +10,6 @@ export class RepositoryService {
   
   setOption(option, value) {      
      this.data[option] = value;  
-     console.log("this.data",this.data)
    }  
    
    getOption() {  
