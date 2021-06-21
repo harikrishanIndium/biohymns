@@ -2,6 +2,9 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms'
 import { AppRoutingModule } from './app-routing.module';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/auth-interceptor';
+import { RepositoryService } from './service/repository.service';
 import { AppComponent } from './app.component';
 import { ManualModule } from './manual/manual.module';
 import { VairaManualModule } from './vaira-manual/vaira-manual.module';
@@ -15,7 +18,7 @@ import { ProjectsModule } from './pages/projects/projects.module';
 import { MaterialModule } from './shared/material.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PdflibModule } from './pdflib/pdflib.module';
-import { RepositoryService } from './service/repository.service';
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -28,6 +31,7 @@ import { RepositoryService } from './service/repository.service';
     AppRoutingModule,
     FormsModule,
     BrowserAnimationsModule,
+    HttpClientModule, 
     MaterialModule,
     MatDialogModule,
     /* user modules */
@@ -39,7 +43,14 @@ import { RepositoryService } from './service/repository.service';
     PdflibModule,
     ProjectsModule,
   ],
-  providers: [RepositoryService],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
+   
+    ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

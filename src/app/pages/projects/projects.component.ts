@@ -6,7 +6,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import { FileUploader, FileLikeObject } from 'ng2-file-upload';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
-
+import { RepositoryService } from '../../service/repository.service';
 const ELEMENT_DATA = [
   {id: 1, name: 'Project 1', files: 1},
   {id: 2, name: 'Project 2', files: 4},
@@ -61,11 +61,17 @@ export class ProjectsComponent implements AfterViewInit {
 
   progress: number = 0;
   fileView:boolean = false;
-  constructor(private router: Router) { }
+  constructor(private router: Router,private service:RepositoryService) { }
 
   ngOnInit(){
     this.listOfProjectView=true;
-    this.projectView=false
+    this.projectView=false;
+    // this.service.getProjects().subscribe(data=>{
+      //ELEMENT_DATA=data.result;
+    // },error=>{
+
+    // });
+    
   }
 
   ngAfterViewInit() {
@@ -76,7 +82,12 @@ export class ProjectsComponent implements AfterViewInit {
     this.listOfProjectView=false;
     this.addlistOfProjectView=true;
     this.projectView=true
-    this.selectedProject = _.find(ELEMENT_DATA, {id:id})
+    this.selectedProject = _.find(ELEMENT_DATA, {id:id});
+    // this.service.getSingleProjects().subscribe(data=>{
+      //ELEMENT_DATA=data.result;
+    // },error=>{
+
+    // });
   }
   showUploadfileSection(){
     this.croppopup=true;
