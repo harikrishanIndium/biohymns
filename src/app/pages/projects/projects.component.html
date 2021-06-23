@@ -1,159 +1,188 @@
 <div class="col-lg-12 p-1" *ngIf="listOfProjectView">
-    <h1>List of Projects</h1>
-    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 col-lg-10 offset-lg-1">
-    
-        <!-- Position Column -->
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
-          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-        </ng-container>
-      
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-        </ng-container>
-      
-        <!-- Weight Column -->
-        <ng-container matColumnDef="files">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Files </th>
-          <td mat-cell *matCellDef="let element"> {{element.files}} </td>
-        </ng-container>
+  <div class="col-lg-12 row mt-4 mb-3">
+    <div class="col-lg-10">
+      <h4>List of Projects</h4>
+    </div>
+    <div class="col-lg-2">
+      <button mat-stroked-button color="primary" (click)="fileModal()">Add New Project</button>
+    </div>
 
-        <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Process </th>
-            <td mat-cell *matCellDef="let element">
-                <button mat-mini-fab color="primary" (click)="viewProjectModel(element.id)">
-                    <mat-icon>zoom_out_map</mat-icon>
-                </button>
-            </td>
-          </ng-container>
-      
-        <!-- Symbol Column -->
-        <!-- <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
-          <td mat-cell *matCellDef="let element"> {{element.action}} </td>
-        </ng-container> -->
-      
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+  </div>
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 col-lg-10 offset-lg-1">
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.project_name}} </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="files">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Files </th>
+      <td mat-cell *matCellDef="let element"> {{element.total_files_count}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Process </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-mini-fab color="primary" (click)="viewProjectModel(element.id)">
+          <mat-icon>zoom_out_map</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+
 </div>
 
 <div class="col-lg-12 p-1 row" *ngIf="projectView">
-    <div class="col-lg-11">
-        <h3>Project > {{selectedProject.name}}</h3> 
+  <div class="col-lg-11">
+    <!-- <h3>Project > {{selectedProject.name}}</h3>  -->
+  </div>
+  <div class="col-lg-1">
+    <button mat-mini-fab color="primary" (click)="closeProjectView()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </div>
+  <div class="col-lg-12">&nbsp;</div>
+  <div class="col-lg-12 row">
+    <div class="col-lg-10">
+      <h4>List of Files</h4>
     </div>
-    <div class="col-lg-1">
-        <button mat-mini-fab color="primary" (click)="closeProjectView()">
-            <mat-icon>arrow_back</mat-icon>
-        </button>
+    <div class="col-lg-2">
+      <button mat-stroked-button color="primary" (click)="showUploadfileSection()" *ngIf="!uploadFileSection">Add Files
+        to Project</button>
     </div>
-    <div class="col-lg-12">&nbsp;</div>
-    <div class="col-lg-12 row">
-        <div class="col-lg-10">
-            <h4>List of Files</h4>
-        </div>
-        <div class="col-lg-2">
-            <button mat-stroked-button color="primary" (click)="showUploadfileSection()" *ngIf="!uploadFileSection">Add Files to Project</button>
-        </div>
-       
-    </div>
-    <!-- add multiple project start -->
-<div class="col-lg-12 p-1" *ngIf="addlistOfProjectView">
-    
+
+  </div>
+  <!-- add multiple project start -->
+  <div class="col-lg-12 p-1" *ngIf="addlistOfProjectView">
+
     <table mat-table [dataSource]="filesDataSource" matSort class="mat-elevation-z8 col-lg-10 offset-lg-1">
-    
-        <!-- Position Column -->
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
-          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-        </ng-container>
-      
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-        </ng-container>
-      
-        <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
-            <td mat-cell *matCellDef="let element">
-                <button mat-mini-fab color="primary" (click)="editFile()">
-                    <mat-icon>edit</mat-icon>
-                </button>
-            </td>
-          </ng-container>
-      
-        <tr mat-header-row *matHeaderRowDef="filesDisplayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: filesDisplayedColumns;"></tr>
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.file_name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-mini-fab color="primary" (click)="editFile(element.id)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="filesDisplayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: filesDisplayedColumns;"></tr>
     </table>
-</div>
-<!-- add multiple project end -->
+  </div>
+  <!-- add multiple project end -->
 
 
-<!-- popup start -->
-<div class="modal shadow" id="myModal" *ngIf="croppopup" style="display: block!important;">
+  <!-- popup start -->
+  <div class="modal shadow" id="myModal" *ngIf="croppopup" style="display: block!important;">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="form-group row">
-                    <div class="col-12 text-center">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="form-group row">
+            <div class="col-12 text-center">
 
-                        <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)" [uploader]="uploader" class="drop-zone">
-                            Drop files here...
-                          </div>
-                          
-                          <div class="file-input-container">
-                            <label>
-                              <input type="file" ng2FileSelect [uploader]="uploader" multiple />
-                              Add Files
-                            </label>
-                          </div>
-                          
-                          <h2>Files: {{ uploader?.queue?.length }}</h2>
-                          
-                          <ion-list>
-                            <!-- <ion-reorder-group (ionItemReorder)="reorderFiles($event)" disabled="false"> -->
-                              <ion-item *ngFor="let item of uploader.queue">
-                                <ion-label>
-                                  {{ item?.file?.name }}
-                                </ion-label>
-                                <ion-reorder></ion-reorder>
-                              </ion-item>
-                            <!-- </ion-reorder-group> -->
-                          </ion-list>
-                            
-                    </div>
-                </div>
-                  <div class="form-group row">
-                <div class="col-9 ">
-                </div>
-               
-                <div class="col-3 text-right">
-                    <button mat-stroked-button color="primary" (click)="cancel()">cancel</button>
-                </div>
+              <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)"
+                [uploader]="uploader" class="drop-zone">
+                Drop files here...
+              </div>
+
+              <div class="file-input-container">
+                <label>
+                  <input type="file" ng2FileSelect [uploader]="uploader" multiple />
+                  Add Files
+                </label>
+              </div>
+
+              <h2>Files: {{ uploader?.queue?.length }}</h2>
+
+              <ion-list>
+                <!-- <ion-reorder-group (ionItemReorder)="reorderFiles($event)" disabled="false"> -->
+                <ion-item *ngFor="let item of uploader.queue">
+                  <ion-label>
+                    {{ item?.file?.name }}
+                  </ion-label>
+                  <ion-reorder></ion-reorder>
+                </ion-item>
+                <!-- </ion-reorder-group> -->
+              </ion-list>
+
             </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-9 ">
             </div>
+
+            <div class="col-3 text-right">
+              <button mat-stroked-button color="primary" (click)="cancel()">cancel</button>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
+  <!-- popup end -->
 
-<!-- popup end -->
+
 
 </div>
 
 <div class="col-lg-12 p-1 row" *ngIf="fileView">
   <div class="col-lg-11">
-      <h3>Project > {{selectedProject.name}} > Filename.pdf</h3> 
+    <h3>Project > {{selectedProject.name}} > Filename.pdf</h3>
   </div>
   <div class="col-lg-1">
-      <button mat-mini-fab color="primary" (click)="closeFileView()">
-          <mat-icon>arrow_back</mat-icon>
-      </button>
+    <button mat-mini-fab color="primary" (click)="closeFileView()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
   </div>
   <div class="col-lg-12">&nbsp;</div>
   <div class="col-lg-12 row">
     <app-file></app-file>
   </div>
 </div>
+
+<!-- create new project start -->
+<mat-card class="example-card mat-elevation-z8 mt-4 text-center " *ngIf="addproject">
+  <mat-form-field class="mt-4">
+    <div>
+      <mat-toolbar>
+        <input matInput [(ngModel)]="fileAttr" placeholder="Enter Project Name" name="name" />
+        <!-- <button mat-flat-button color="primary">
+                  Browse File
+              </button> -->
+      </mat-toolbar>
+      <!-- <input type="file" #fileInput id="uploadFile" (change)="uploadFileEvt($event)" name="uploadFile"
+              multiple="multiple" /> -->
+    </div>
+  </mat-form-field>
+  <div class="form-group row">
+    <div class="col-12 text-center mb-3">
+      <button mat-stroked-button class="btn btn-danger mr-2" (click)="cancelProject()">Cancel</button>
+      <button mat-stroked-button class="btn btn-success mr-2">Create</button>
+    </div>
+  </div>
+</mat-card>
+<!-- create new project end -->

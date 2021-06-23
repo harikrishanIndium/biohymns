@@ -33,6 +33,10 @@ const routes: Routes = [
         component: ProjectsComponent
       },
       {
+        path: 'files',
+        component: ProjectsComponent
+      },
+      {
         path: 'dashboard',
         component: DashboardComponent
       },

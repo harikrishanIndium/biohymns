@@ -27,7 +27,7 @@ export class RepositoryService {
 
   //getsingle projects start
   getSingleProject(id: any): Observable<any> {
-    let path = environment.apiEndPoint + "project_api/" + id
+    let path = environment.apiEndPoint + "project_api/?id=" + id
     return this.http.get(path)
   }
   //getsingle projects end
@@ -41,7 +41,7 @@ export class RepositoryService {
 
   //getall files start
   getSingleFiles(id: any): Observable<any> {
-    let path = environment.apiEndPoint + "file_api/" + id
+    let path = environment.apiEndPoint + "file_api/?file_id=" + id
     return this.http.get(path)
   }
   //getall files end

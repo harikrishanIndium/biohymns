@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   }
   login() {
     if (this.loginform.valid) {
+      sessionStorage.removeItem('idtoken');
       const formData = new FormData();
       formData.append("username", "charan");
       formData.append("password", "sravanbgn1");
