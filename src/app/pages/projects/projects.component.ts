@@ -61,6 +61,7 @@ export class ProjectsComponent implements AfterViewInit {
   fileInput!: ElementRef;
   fileAttr: any;
   base64: any;
+  selectedFile:any;
   prjData = { project_name: "" }
   constructor(private router: Router, public service: RepositoryService, private route: ActivatedRoute,) { }
 
@@ -97,10 +98,9 @@ export class ProjectsComponent implements AfterViewInit {
     this.filesDataSource.sort = this.sort;
   }
   project_id: any;
-  viewProjectModel(id) {
-    this.project_id = "";
-    this.project_id = id;
-    this.service.getSingleProject(id).subscribe(data => {
+  viewProjectModel(project) {
+    this.selectedProject = project
+    this.service.getSingleProject(project['id']).subscribe(data => {
       this.filesDataSource = new MatTableDataSource(data);
       this.listOfProjectView = false;
       this.addlistOfProjectView = true;
@@ -146,6 +146,7 @@ export class ProjectsComponent implements AfterViewInit {
     this.service.getSingleFiles(id).subscribe(data => {
       this.projectView = false;
       this.fileView = true;
+      this.selectedFile = data;
       console.log(data)
       this.base64 = data.file;
       console.log("this.base6", this.base64)
@@ -199,7 +200,7 @@ export class ProjectsComponent implements AfterViewInit {
 
     const formData = new FormData();
     formData.append("file", this.employeefilepath);
-    formData.append("project_id", this.project_id);
+    formData.append("project_id", this.selectedProject['id']);
     this.service.postFile(formData).subscribe(data => {
       console.log("data", data);
       alert("file added");

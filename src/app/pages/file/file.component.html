@@ -15,8 +15,23 @@
                 <div class="shadow p-3 mb-2 bg-white rounded">
                     <a class="btn btn-link">Dinesh S</a> Upload the PDF 15-06-2020
                 </div>
-                {{redactionResults | json}}
+                <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button>
+
             </mat-card-content>
         </mat-card>
     </div>
 </div>
+<ng-template #content let-c="close">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Redaction Type</h4>
+    </div>
+    <div class="modal-body">
+        <mat-radio-group aria-label="Select an option" [(ngModel)]="testvar" class="radio-option">
+            <mat-radio-button value="PPD">PPD</mat-radio-button>
+            <mat-radio-button value="CCI">CCI</mat-radio-button>
+        </mat-radio-group>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">Save</button>
+    </div>
+  </ng-template>
