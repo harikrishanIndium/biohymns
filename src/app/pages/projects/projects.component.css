@@ -89,3 +89,36 @@ input[type="file"] {
   position: absolute;
 }
  /* create new project end */
+
+  /* file upload start */
+  .drop-zone { 
+    background-color: #f6f6f6;
+    border: dotted 3px #dedddd; 
+    height: 30vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.file-input-container {
+
+    text-align: center;
+
+   
+}
+input[type="file"] {
+        display: none;
+        background-color: lightgreen;
+    }
+
+    label {
+      border: 1px solid #ccc;
+      padding: 6px 12px;
+      cursor: pointer;
+  }
+
+.nv-file-over { 
+    border: dotted 3px red; 
+}
+ /* file upload end */

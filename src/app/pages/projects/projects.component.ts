@@ -1,12 +1,14 @@
 
-import { AfterViewInit, Component, ViewChild, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, ElementRef, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { FileUploader, FileLikeObject } from 'ng2-file-upload';
 import * as _ from 'lodash';
 import { Router, ActivatedRoute } from '@angular/router';
-import { RepositoryService } from '../../service/repository.service';
+import { FileQueueObject, RepositoryService } from '../../service/repository.service';
+import { Observable } from 'rxjs';
+
 
 // const FILE_DATA = [
 //   { id: 1, name: 'File 1', files: 1 },
@@ -32,6 +34,10 @@ import { RepositoryService } from '../../service/repository.service';
 
 export class ProjectsComponent implements AfterViewInit {
   //file upload start
+  [x: string]: any;
+  @Output() onCompleteItem = new EventEmitter();
+  queue!: Observable<FileQueueObject[]>;
+
   public uploader: FileUploader = new FileUploader({});
   public hasBaseDropZoneOver: boolean = false;
   //file upload end
@@ -54,9 +60,16 @@ export class ProjectsComponent implements AfterViewInit {
   @ViewChild('fileInput')
   fileInput!: ElementRef;
   fileAttr: any;
-  constructor(private router: Router, private service: RepositoryService, private route: ActivatedRoute,) { }
+  base64: any;
+  prjData = { project_name: "" }
+  constructor(private router: Router, public service: RepositoryService, private route: ActivatedRoute,) { }
 
   ngOnInit() {
+    //file upload kishore start
+    this.queue = this.service.queue;
+    this.service.onCompleteItem = this.completeItem;
+    //file upload kishore end
+
     let path = this.route.snapshot.url;
     this.path2 = path[0].toString();
     if (this.path2 == "projects") {
@@ -83,7 +96,10 @@ export class ProjectsComponent implements AfterViewInit {
     this.dataSource.sort = this.sort;
     this.filesDataSource.sort = this.sort;
   }
+  project_id: any;
   viewProjectModel(id) {
+    this.project_id = "";
+    this.project_id = id;
     this.service.getSingleProject(id).subscribe(data => {
       this.filesDataSource = new MatTableDataSource(data);
       this.listOfProjectView = false;
@@ -102,6 +118,7 @@ export class ProjectsComponent implements AfterViewInit {
   }
   cancel() {
     this.croppopup = false;
+    this.viewProjectModel(this.project_id);
   }
   //file uploade start
   getFiles(): FileLikeObject[] {
@@ -124,11 +141,15 @@ export class ProjectsComponent implements AfterViewInit {
     }
 
   }
+
   editFile(id) {
     this.service.getSingleFiles(id).subscribe(data => {
       this.projectView = false;
       this.fileView = true;
-      console.log("gfgfgfg", data);
+      console.log(data)
+      this.base64 = data.file;
+      console.log("this.base6", this.base64)
+      sessionStorage.setItem("baseData", this.base64);
     });
     // this.router.navigateByUrl("/manual")
 
@@ -147,8 +168,50 @@ export class ProjectsComponent implements AfterViewInit {
   }
   cancelProject() {
     this.ngOnInit();
-    this.addproject=false;
+    this.addproject = false;
+    let array = [];
+    this.service.clearQueue();
   }
+  //project create api start
+  createProject() {
+    this.service.postProject(this.prjData).subscribe(data => {
+      this.ngOnInit();
+      this.addproject = false;
+    })
+  }
+  //project create pai end
+
+  completeItem = (item: FileQueueObject, response: any) => {
+    this.onCompleteItem.emit({ item, response });
+  }
+  employeefilepath1: any = [];
+  
+  fileSelected(event) {
+    // this.employeefilepath1 = [];
+    // this.employeefilepath1.push(event.target.files[0]);
+    this.employeefilepath = event.target.files[0];
+  }
+   addToQueue() {
+    const fileBrowser = this.fileInput.nativeElement;
+    this.service.addToQueue(fileBrowser.files);
+   }
+  uploadfunction() {
+
+    const formData = new FormData();
+    formData.append("file", this.employeefilepath);
+    formData.append("project_id", this.project_id);
+    this.service.postFile(formData).subscribe(data => {
+      console.log("data", data);
+      alert("file added");
+    })
+   
+
+
+  }
+
+
+
+  // }
 
 }
 

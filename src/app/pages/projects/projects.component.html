@@ -98,45 +98,44 @@
 
   <!-- popup start -->
   <div class="modal shadow" id="myModal" *ngIf="croppopup" style="display: block!important;">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog ">
       <div class="modal-content">
+        
         <div class="modal-body">
           <div class="form-group row">
             <div class="col-12 text-center">
-
-              <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)"
-                [uploader]="uploader" class="drop-zone">
-                Drop files here...
-              </div>
-
-              <div class="file-input-container">
+              <div class="file-input-container mt-2">
                 <label>
-                  <input type="file" ng2FileSelect [uploader]="uploader" multiple />
+                  <input type="file"  mat-stroked-button  #fileInput multiple (change)="addToQueue();fileSelected($event)" />
                   Add Files
                 </label>
               </div>
 
-              <h2>Files: {{ uploader?.queue?.length }}</h2>
-
-              <ion-list>
-                <!-- <ion-reorder-group (ionItemReorder)="reorderFiles($event)" disabled="false"> -->
-                <ion-item *ngFor="let item of uploader.queue">
-                  <ion-label>
-                    {{ item?.file?.name }}
-                  </ion-label>
-                  <ion-reorder></ion-reorder>
-                </ion-item>
-                <!-- </ion-reorder-group> -->
-              </ion-list>
-
+              <table class="table-headed table-striped mt-3">
+                <thead>
+                  <tr>
+                    <th span="1" style="width: 15%;">Name</th>
+                    <th span="1" style="width: 70%;">Size</th>
+                    <!-- <th span="1" style="width: 15%;">Progress</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of queue | async">
+                    <td>{{ item?.file?.name }}</td>
+                    <td>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                    <!-- <td>{{ item.progress + ' %' }}
+                      <progress id="file" [value]="item.progress" max="100"> </progress>
+                    </td> -->
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
           <div class="form-group row">
-            <div class="col-9 ">
-            </div>
-
-            <div class="col-3 text-right">
-              <button mat-stroked-button color="primary" (click)="cancel()">cancel</button>
+            <div class="col-12 text-center mt-4">
+              <!-- <button  mat-stroked-button  class="btn btn-success mr-2" (click)="service.uploadAll()">upload All</button> -->
+              <button  mat-stroked-button  class="btn btn-success mr-2" (click)="uploadfunction()">upload All</button>
+              <button mat-stroked-button class="btn btn-danger mr-2" (click)="service.clearQueue();cancel()">cancel</button>
             </div>
           </div>
         </div>
@@ -151,7 +150,7 @@
 
 <div class="col-lg-12 p-1 row" *ngIf="fileView">
   <div class="col-lg-11">
-    <h3>Project > {{selectedProject.name}} > Filename.pdf</h3>
+    <!-- <h3>Project > {{selectedProject.name}} > Filename.pdf</h3> -->
   </div>
   <div class="col-lg-1">
     <button mat-mini-fab color="primary" (click)="closeFileView()">
@@ -160,7 +159,7 @@
   </div>
   <div class="col-lg-12">&nbsp;</div>
   <div class="col-lg-12 row">
-    <app-file></app-file>
+    <app-file  ></app-file>
   </div>
 </div>
 
@@ -169,19 +168,15 @@
   <mat-form-field class="mt-4">
     <div>
       <mat-toolbar>
-        <input matInput [(ngModel)]="fileAttr" placeholder="Enter Project Name" name="name" />
-        <!-- <button mat-flat-button color="primary">
-                  Browse File
-              </button> -->
+        <input matInput [(ngModel)]="prjData.project_name" placeholder="Enter Project Name" name="name" />
       </mat-toolbar>
-      <!-- <input type="file" #fileInput id="uploadFile" (change)="uploadFileEvt($event)" name="uploadFile"
-              multiple="multiple" /> -->
     </div>
   </mat-form-field>
   <div class="form-group row">
     <div class="col-12 text-center mb-3">
+      <button mat-stroked-button class="btn btn-success mr-2" (click)="createProject()">Create</button>
       <button mat-stroked-button class="btn btn-danger mr-2" (click)="cancelProject()">Cancel</button>
-      <button mat-stroked-button class="btn btn-success mr-2">Create</button>
+     
     </div>
   </div>
 </mat-card>
