@@ -71,7 +71,7 @@
       <!-- Position Column -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
-        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.file_id}} </td>
       </ng-container>
 
       <!-- Name Column -->
@@ -83,7 +83,7 @@
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
         <td mat-cell *matCellDef="let element">
-          <button mat-mini-fab color="primary" (click)="editFile(element.id)">
+          <button mat-mini-fab color="primary" (click)="editFile(element.file_id)">
             <mat-icon>edit</mat-icon>
           </button>
         </td>
