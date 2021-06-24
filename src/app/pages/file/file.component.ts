@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RepositoryService } from '../../service/repository.service';
 import * as _ from 'lodash';
-
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 @Component({
   selector: 'app-file',
   templateUrl: './file.component.html',
@@ -231,10 +231,31 @@ export class FileComponent implements OnInit {
           if (action == 'add' && annotations[0]['Subject'] == 'Redact') {
             let type = ""
             console.log(annotations)
-            if (confirm("Does this selection contain PPD?")==true)
-              type = "PPD"//console.log("PPD")
-            else
-              type = "CCI"//console.log("cci")
+            // if (confirm("Does this selection contain PPD?")==true)
+            //   type = "PPD"//console.log("PPD")
+            // else
+            //   type = "CCI"//console.log("cci")
+            let inputOptions = {
+              "PPD":"PPD",
+              "CCI":"CCI"
+            }
+           Swal.fire({
+              title: 'Select Redaction Type',
+              input: 'radio',
+              allowOutsideClick: false,
+              inputOptions: inputOptions,
+              inputValidator: (value) => {
+                if (!value) {
+                  return 'You need to choose Redaction Type'
+                }else{
+                  return "";
+                }
+              }
+            }).then((result) => {
+              console.log("value",result)
+              type = result.value;
+            });
+            
             this.redactionTypes.push({
               id: annotations[0]['Sw'],
               type: type
