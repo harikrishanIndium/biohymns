@@ -96,7 +96,7 @@ export class FileComponent implements OnInit {
         const annotHistoryManager = docViewer.getAnnotationHistoryManager();
         // console.log("user", annotManager.getDisplayAuthor(annotManager))
         // instance.loadDocument(base64ToBlob(this.input.result), { filename: 'myfile.pdf' });
-        instance.setTheme('dark');
+        // instance.setTheme('dark');
         /* hide the tool group */
         instance.disableElements(['toolbarGroup-View']);
         instance.disableElements(['toolbarGroup-Annotate']);
@@ -237,7 +237,7 @@ export class FileComponent implements OnInit {
           if(action=='add' && annotations[0]['Subject']=='Redact'){
             let type = ""
             console.log(annotations)
-            if (confirm("The Redaction part contains Personal details")==true)
+            if (confirm("Does this selection contain PPD?")==true)
               type = "PPD"//console.log("PPD")
             else
               type = "CCI"//console.log("cci")
