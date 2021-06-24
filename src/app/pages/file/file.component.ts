@@ -189,8 +189,11 @@ export class FileComponent implements OnInit {
                 results = _.merge(_.keyBy(results,'id'),_.keyBy(thys.redactionTypes,'id'))
                 thys.redactionResults = results;
                 console.log("results ", thys.redactionResults)
-                let data = thys.selectedFile
-                data['redactArray'] = _.map(thys.redactionResults);
+                let data = {
+                  'id':thys.selectedFile['id'],
+                  'file':thys.selectedFile['file'],
+                  'redactArray':_.map(thys.redactionResults)
+                }
                 console.log("data ", data)
               }
             },
