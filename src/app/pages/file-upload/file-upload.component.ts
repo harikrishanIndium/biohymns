@@ -34,7 +34,6 @@ export class FileUploadComponent implements OnInit {
     this.service.postFile(formData).subscribe(data => {
       this.router.navigate(["redact-file", data.result[0].id])
     });
-
   }
 
 }
