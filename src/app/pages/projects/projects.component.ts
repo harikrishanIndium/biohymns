@@ -2,7 +2,8 @@
 import { AfterViewInit, Component, ViewChild, ElementRef, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import{ MatPaginator} from'@angular/material/paginator';
+import {MatTableDataSource } from '@angular/material/table';
 import { FileUploader, FileLikeObject } from 'ng2-file-upload';
 import * as _ from 'lodash';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -10,18 +11,7 @@ import { FileQueueObject, RepositoryService } from '../../service/repository.ser
 import { Observable } from 'rxjs';
 
 
-// const FILE_DATA = [
-//   { id: 1, name: 'File 1', files: 1 },
-//   { id: 2, name: 'File 2', files: 4 },
-//   { id: 3, name: 'File 3', files: 6 },
-//   { id: 4, name: 'File 5', files: 9 },
-//   { id: 5, name: 'File 4', files: 10 },
-//   { id: 6, name: 'File 7', files: 12 },
-//   { id: 7, name: 'File 8', files: 14 },
-//   { id: 8, name: 'File 9', files: 15 },
-//   { id: 9, name: 'File 11', files: 18 },
-//   { id: 10, name: 'File 12', files: 20 },
-// ];
+
 /**
  * @title Table with sorting
  */
@@ -51,6 +41,9 @@ export class ProjectsComponent implements AfterViewInit {
   uploadFileSection: boolean = false;
   addlistOfProjectView: boolean = false;
   croppopup: boolean = false;
+
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   progress: number = 0;
@@ -60,37 +53,27 @@ export class ProjectsComponent implements AfterViewInit {
   @ViewChild('fileInput')
   fileInput!: ElementRef;
   fileAttr: any;
-  base64: any;
-  selectedFile:any;
+  selectedFile: any;
   prjData = { project_name: "" }
   constructor(private router: Router, public service: RepositoryService, private route: ActivatedRoute,) { }
 
   ngOnInit() {
-    //file upload kishore start
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort
+    //file upload start
     this.queue = this.service.queue;
     this.service.onCompleteItem = this.completeItem;
-    //file upload kishore end
+    //file upload  end
 
     let path = this.route.snapshot.url;
     this.path2 = path[0].toString();
-    if (this.path2 == "projects") {
-      this.service.getProjects().subscribe(data => {
-        this.listOfProjectView = true;
-        this.projectView = false;
-        this.dataSource = new MatTableDataSource(data);
-      }, error => {
-      });
-    }
-    else {
-      this.service.getFiles().subscribe(data => {
-        console.log("dataaaaaaa", data);
-        this.listOfProjectView = false;
-        this.addlistOfProjectView = true;
-        this.projectView = true
-        this.filesDataSource = new MatTableDataSource(data);
-      }, error => {
-      });
-    }
+    this.service.getProjects().subscribe(data => {
+      this.listOfProjectView = true;
+      this.projectView = false;
+      this.dataSource = new MatTableDataSource(data);
+    }, error => {
+    });
+
   }
 
   ngAfterViewInit() {
@@ -117,8 +100,10 @@ export class ProjectsComponent implements AfterViewInit {
     this.croppopup = true;
   }
   cancel() {
+    this.employeefilepath1 = []
     this.croppopup = false;
-    this.viewProjectModel(this.project_id);
+    this.viewProjectModel(this.selectedProject);
+    this.service.clearQueue();
   }
   //file uploade start
   getFiles(): FileLikeObject[] {
@@ -147,10 +132,6 @@ export class ProjectsComponent implements AfterViewInit {
       this.projectView = false;
       this.fileView = true;
       this.selectedFile = data;
-      console.log(data)
-      this.base64 = data.file;
-      console.log("this.base6", this.base64)
-      sessionStorage.setItem("baseData", this.base64);
     });
     // this.router.navigateByUrl("/manual")
 
@@ -186,28 +167,36 @@ export class ProjectsComponent implements AfterViewInit {
     this.onCompleteItem.emit({ item, response });
   }
   employeefilepath1: any = [];
-  
+
   fileSelected(event) {
-    // this.employeefilepath1 = [];
-    // this.employeefilepath1.push(event.target.files[0]);
-    this.employeefilepath = event.target.files[0];
+    this.addToQueue();
+    this.service.uploadAll()
+    if (event.target.files.length > 0) {
+      for (let i = 0; i < event.target.files.length; i++) {
+        let file = event.target.files[i]
+        this.employeefilepath1.push(file);
+        console.log(this.employeefilepath1);
+      }
+      event.target.value = '';
+
+    }
   }
-   addToQueue() {
+  addToQueue() {
     const fileBrowser = this.fileInput.nativeElement;
     this.service.addToQueue(fileBrowser.files);
-   }
+  }
   uploadfunction() {
 
     const formData = new FormData();
-    formData.append("file", this.employeefilepath);
+    for (var i = 0; i < this.employeefilepath1.length; i++) {
+      formData.append("file", this.employeefilepath1[i]);
+    }
     formData.append("project_id", this.selectedProject['id']);
     this.service.postFile(formData).subscribe(data => {
       console.log("data", data);
-      alert("file added");
+      alert("file added successfully");
+      this.cancel();
     })
-   
-
-
   }
 
 

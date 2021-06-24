@@ -7,15 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainLayoutComponent implements OnInit {
   navOpen = false;
-  
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  onNavOpenChange(){
-    if(this.navOpen) this.navOpen = false
-    else this.navOpen=true;
+  onNavOpenChange() {
+    if (this.navOpen) this.navOpen = false
+    else this.navOpen = true;
+  }
+  logout() {
+    sessionStorage.removeItem('idtoken');
   }
 
 }

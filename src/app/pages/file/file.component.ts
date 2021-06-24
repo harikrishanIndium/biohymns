@@ -3,6 +3,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import WebViewer from '@pdftron/webviewer';
 import { environment } from 'src/environments/environment';
+import { Router, ActivatedRoute } from '@angular/router';
 import { RepositoryService } from '../../service/repository.service';
 import * as _ from 'lodash';
 
@@ -13,48 +14,59 @@ import * as _ from 'lodash';
 })
 export class FileComponent implements OnInit {
   @ViewChild('viewer', { static: false }) viewer: any;
-  @ViewChild('content') content:any;
+  @ViewChild('content') content: any;
   @Input('selectedFile') selectedFile: any;
   constructor(
-    private service: RepositoryService, 
+    private route: ActivatedRoute,
+    private service: RepositoryService,
     public dialog: MatDialog,
     private modalService: NgbModal
-    ) { }
+  ) { }
   redactionResults: any = [];
   redactionTypes: any = [];
-  
-  closeResult: string ='';
-  testvar:string = 'PPD'
+
+  closeResult: string = '';
+  testvar: string = 'PPD'
   ngOnInit(): void {
-  }
-  ngOnChanges(changes: SimpleChanges){
-    console.log("changes",changes)
-    if(this.selectedFile){
-      setTimeout( ()=>{
+    let path = this.route.snapshot.url;
+    let path2 = path[1].toString();
+    if (path.length > 1) {
+      this.service.getSingleFiles(path2).subscribe(data => {
+        this.selectedFile = data;
         this.showPDF();
-      },1000)
+      });
+    }
+
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    console.log("2222r")
+    console.log("changes", this.selectedFile)
+    if (this.selectedFile) {
+      setTimeout(() => {
+        this.showPDF();
+      }, 1000)
     }
   }
   open(content) {
     console.log("opening")
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', backdrop:false}).result.then((result) => {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', backdrop: false }).result.then((result) => {
       console.log("result ", this.testvar)
       this.closeResult = `Closed with: ${result}`;
-      console.log("closeResult",this.closeResult)
+      console.log("closeResult", this.closeResult)
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      console.log("closeResult",this.closeResult)
+      console.log("closeResult", this.closeResult)
 
     });
   }
-  
+
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
       return 'by clicking on a backdrop';
     } else {
-      return  `with: ${reason}`;
+      return `with: ${reason}`;
     }
   }
   ngAfterViewInit() {
@@ -86,7 +98,7 @@ export class FileComponent implements OnInit {
     WebViewer({
       path: '../assets/lib',
       // initialDoc: '../assets/files/webviewer-demo-annotated.pdf',
-      initialDoc: environment.apiEndPoint+(this.selectedFile.file).replace("/media/",'media/'),
+      initialDoc: environment.apiEndPoint + (this.selectedFile.file).replace("/media/", 'media/'),
       enableRedaction: true,
       licenseKey: "25R4N365K716RZAXK9Y2YCM021BW48H0I0S",
 
@@ -122,7 +134,7 @@ export class FileComponent implements OnInit {
           { dataElement: "textRedactToolButton" },
         ])
         instance.annotationPopup.update([
-          {dataElement:"annotationDeleteButton"}
+          { dataElement: "annotationDeleteButton" }
         ])
         console.log("annotation popup ", instance.annotationPopup.getItems())
 
@@ -170,15 +182,16 @@ export class FileComponent implements OnInit {
             { type: "actionButton", dataElement: "undoButton", title: "action.undo", img: "icon-operation-undo", onClick: () => { annotHistoryManager.undo(); } },
             { type: "toolGroupButton", toolGroup: "redactionTools", dataElement: "redactionToolGroupButton", title: "annotation.redact", showColor: "never" },
             { type: "spacer", hidden: ['mobile'] },
-            { type: "actionButton", img: "icon-header-download", 
+            {
+              type: "actionButton", img: "icon-header-download",
               onClick: () => {
-              //  annotHistoryManager.undo(); 
+                //  annotHistoryManager.undo(); 
                 console.log(thys.selectedFile)
                 const redactionList = annotManager.getAnnotationsList().filter(annot => annot instanceof Annotations.RedactionAnnotation);
                 let results: any = [];
                 redactionList.map(dat => {
                   let t = {
-                    id:dat['Sw'],
+                    id: dat['Sw'],
                     pageNumber: dat['XB'],
                     pageHeight: docViewer.getPageHeight(dat['XB']),
                     pageWidth: docViewer.getPageWidth(dat['XB']),
@@ -186,7 +199,7 @@ export class FileComponent implements OnInit {
                   }
                   results.push(t)
                 })
-                results = _.merge(_.keyBy(results,'id'),_.keyBy(thys.redactionTypes,'id'))
+                results = _.merge(_.keyBy(results, 'id'), _.keyBy(thys.redactionTypes, 'id'))
                 thys.redactionResults = results;
                 console.log("results ", thys.redactionResults)
                 let data = {
@@ -230,11 +243,11 @@ export class FileComponent implements OnInit {
           console.log("cc", docViewer.getPageWidth(1))
         });
         console.log("annotation popup", instance.annotationPopup.getItems())
-        annotManager.on('annotationSelected',(annotationsList) =>{
-          console.log("annoation added ",annotationsList)
+        annotManager.on('annotationSelected', (annotationsList) => {
+          console.log("annoation added ", annotationsList)
         })
         annotManager.on('annotationChanged', (annotations, action) => {
-          if(action=='add' && annotations[0]['Subject']=='Redact'){
+          if (action == 'add' && annotations[0]['Subject'] == 'Redact') {
             let type = ""
             console.log(annotations)
             if (confirm("Does this selection contain PPD?")==true)
@@ -242,16 +255,16 @@ export class FileComponent implements OnInit {
             else
               type = "CCI"//console.log("cci")
             this.redactionTypes.push({
-              id:annotations[0]['Sw'],
-              type:type
+              id: annotations[0]['Sw'],
+              type: type
             })
 
             // this.modalService.open(this.content)
           }
         });
-        
+
       });
-      
+
   }
   url: any;
   input: any
@@ -285,11 +298,11 @@ export class RedactionTypeComponent {
   constructor(
     public dialogRef1: MatDialogRef<RedactionTypeComponent>,
     // @Inject(MAT_DIALOG_DATA) public data: any
-    ) {}
-    onNoClick(): void {
-      console.log("closeing ", this.dialogRef1)
-     this.dialogRef1.close()
-     alert("colort")
-    }
+  ) { }
+  onNoClick(): void {
+    console.log("closeing ", this.dialogRef1)
+    this.dialogRef1.close()
+    alert("colort")
+  }
 
 }
