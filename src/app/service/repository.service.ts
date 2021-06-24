@@ -27,10 +27,6 @@ export class FileQueueObject {
   }
 
   public upload = () => { /* set in service */ };
-  public isPending = () => this.status === FileQueueStatus.Pending;
-  public isSuccess = () => this.status === FileQueueStatus.Success;
-  public isError = () => this.status === FileQueueStatus.Error;
-  public inProgress = () => this.status === FileQueueStatus.Progress;
   public isUploadable = () => this.status === FileQueueStatus.Pending || this.status === FileQueueStatus.Error;
 
 }
@@ -52,11 +48,6 @@ export class RepositoryService {
   // the queue
   public get queue() {
     return this._queue.asObservable();
-  }
-
-  // public events
-  public onCompleteItem(queueObj: FileQueueObject, response: any): any {
-    return { queueObj, response };
   }
 
   // public functions
@@ -91,7 +82,6 @@ export class RepositoryService {
   }
 
   private _upload(queueObj: FileQueueObject) {
-
     // create form data for file
     const form = new FormData();
     form.append('file', queueObj.file, queueObj.file.name);
@@ -107,7 +97,7 @@ export class RepositoryService {
         if (event.type === HttpEventType.UploadProgress) {
           this._uploadProgress(queueObj, event);
         } else if (event instanceof HttpResponse) {
-          this._uploadComplete(queueObj, event);
+         
         }
       },
       (err: HttpErrorResponse) => {
@@ -124,23 +114,12 @@ export class RepositoryService {
     return queueObj;
   }
 
-
-
   private _uploadProgress(queueObj: FileQueueObject, event: any) {
     // update the FileQueueObject with the current progress
     const progress = Math.round(100 * event.loaded / event.total);
     queueObj.progress = progress;
     queueObj.status = FileQueueStatus.Progress;
     this._queue.next(this._files);
-  }
-
-  private _uploadComplete(queueObj: FileQueueObject, response: HttpResponse<any>) {
-    // update the FileQueueObject as completed
-    queueObj.progress = 100;
-    queueObj.status = FileQueueStatus.Success;
-    queueObj.response = response;
-    this._queue.next(this._files);
-    this.onCompleteItem(queueObj, response.body);
   }
 
   private _uploadFailed(queueObj: FileQueueObject, response: HttpErrorResponse) {
@@ -195,15 +174,6 @@ export class RepositoryService {
     return this.http.get(path)
   }
   //getall files end
-
-  //dynamic file upload start
-  setOption(option, value) {
-    this.data[option] = value;
-  }
-  getOption() {
-    return this.data;
-  }
-  //dynamic file upload end
 
   //project create api start
   postProject(requesdata: any): Observable<any> {

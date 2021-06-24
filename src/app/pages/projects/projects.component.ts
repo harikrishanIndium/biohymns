@@ -25,7 +25,7 @@ import { Observable } from 'rxjs';
 export class ProjectsComponent implements AfterViewInit {
   //file upload start
   [x: string]: any;
-  @Output() onCompleteItem = new EventEmitter();
+  // @Output() onCompleteItem = new EventEmitter();
   queue!: Observable<FileQueueObject[]>;
 
   public uploader: FileUploader = new FileUploader({});
@@ -62,7 +62,7 @@ export class ProjectsComponent implements AfterViewInit {
     this.dataSource.sort = this.sort
     //file upload start
     this.queue = this.service.queue;
-    this.service.onCompleteItem = this.completeItem;
+    //this.service.onCompleteItem = this.completeItem;
     //file upload  end
 
     let path = this.route.snapshot.url;
@@ -163,9 +163,11 @@ export class ProjectsComponent implements AfterViewInit {
   }
   //project create pai end
 
-  completeItem = (item: FileQueueObject, response: any) => {
-    this.onCompleteItem.emit({ item, response });
-  }
+  // completeItem = (item: FileQueueObject, response: any) => {
+   
+  //   //this.onCompleteItem.emit({ item, response });
+  //   console.log(item);
+  // }
   employeefilepath1: any = [];
 
   fileSelected(event) {
@@ -180,6 +182,7 @@ export class ProjectsComponent implements AfterViewInit {
       event.target.value = '';
 
     }
+    console.log("1111111111111",this.completeItem)
   }
   addToQueue() {
     const fileBrowser = this.fileInput.nativeElement;
