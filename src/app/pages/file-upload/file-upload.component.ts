@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild, OnInit, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, OnInit, ElementRef, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RepositoryService } from '../../service/repository.service';
@@ -13,26 +13,28 @@ export class FileUploadComponent implements OnInit {
   fileInput!: ElementRef;
   fileAttr = 'Choose File';
   redactbtn: boolean = false;
+  filepath: any = File;
   constructor(private router: Router, private service: RepositoryService) { }
   ngOnInit(): void {
 
   }
+  project_id: any;
   uploadFileEvt(imgFile: any) {
-    if (imgFile.target.files && imgFile.target.files[0]) {
-      this.fileAttr = imgFile.target.files[0].name;
-      this.redactbtn = true;
-      let reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.service.setOption("result", e.target.result)
-      };
-      reader.readAsDataURL(imgFile.target.files[0]);
-      this.fileInput.nativeElement.value = "";
-    } else {
-      this.fileAttr = 'Choose File';
-    }
+    this.fileAttr = imgFile.target.files[0].name;
+    this.filepath = imgFile.target.files[0]
+    this.redactbtn = true;
+
   }
+
   redact() {
-    this.router.navigateByUrl("redact-file");
+    const formData = new FormData();
+    this.project_id = 1;
+    formData.append("file", this.filepath);
+    formData.append("project_id", this.project_id);
+    this.service.postFile(formData).subscribe(data => {
+      this.router.navigate(["redact-file", data.result[0].id])
+    });
+
   }
 
 }

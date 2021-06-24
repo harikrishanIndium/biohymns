@@ -27,9 +27,6 @@ export class DashboardComponent implements OnInit {
     if (string == "projects") {
       this.router.navigateByUrl("projects");
     }
-    else if (string == "files") {
-      this.router.navigateByUrl("files");
-    }
     else {
       this.router.navigateByUrl("file-upload")
     }

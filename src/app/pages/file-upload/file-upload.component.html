@@ -1,4 +1,4 @@
-<mat-card class="example-card mat-elevation-z8 mt-4 text-center">
+<mat-card class="example-card mat-elevation-z8 mt-4 text-center"  >
     <mat-form-field class="mt-4">
         <div>
             <mat-toolbar>
@@ -7,11 +7,13 @@
                     Browse File
                 </button>
             </mat-toolbar>
+            
             <input type="file" #fileInput id="uploadFile" (change)="uploadFileEvt($event)" name="uploadFile"
-                multiple="multiple" />
+            accept="application/pdf,text/plain" />
         </div>
     </mat-form-field>
     <div class="mt-2">
         <button class="btn btn-success mb-4" *ngIf="redactbtn" (click)="redact()">Redact</button>
     </div>
 </mat-card>
+

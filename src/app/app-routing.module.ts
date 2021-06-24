@@ -49,7 +49,7 @@ const routes: Routes = [
         component: FileUploadComponent
       },
       {
-        path:"redact-file",
+        path:"redact-file/:id",
         component: FileComponent
       }
     ]
