@@ -7,6 +7,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { RepositoryService } from '../../service/repository.service';
 import * as _ from 'lodash';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
+const inputOptions = {
+  "PPD":"PPD",
+  "CCI":"CCI"
+}
 @Component({
   selector: 'app-file',
   templateUrl: './file.component.html',
@@ -22,6 +26,8 @@ export class FileComponent implements OnInit {
   ) { }
   redactionResults: any = [];
   redactionTypes: any = [];
+  lastSelected:any;
+  
 
   ngOnInit(): void {
     let path = this.route.snapshot.url;
@@ -35,8 +41,6 @@ export class FileComponent implements OnInit {
 
   }
   ngOnChanges(changes: SimpleChanges) {
-    console.log("2222r")
-    console.log("changes", this.selectedFile)
     if (this.selectedFile) {
       setTimeout(() => {
         this.showPDF();
@@ -89,9 +93,48 @@ export class FileComponent implements OnInit {
           { dataElement: "copyTextButton" },
           { dataElement: "textRedactToolButton" },
         ])
-        // instance.annotationPopup.update([
-        //   { dataElement: "annotationDeleteButton" }
-        // ])
+        instance.annotationPopup.update([
+          { dataElement: "annotationDeleteButton" },
+          {
+            type: 'actionButton',
+            img:"icon-tool-redaction-inline",
+            title:'Change Redaction Type',
+            onClick: () => {
+              console.log(this.lastSelected)
+              console.log (this.redactionTypes,this.redactionTypes,this.lastSelected['Sw'])
+              let index = "";
+              let value = {};
+              _.each (this.redactionTypes, (obj,key)=>{
+                console.log(obj,key)
+                if(obj['id']==this.lastSelected['Sw']){
+                  index = key;
+                  value = obj;
+                }
+              })
+              Swal.fire({
+                title: 'Change Redaction Type',
+                input: 'radio',
+                allowOutsideClick: false,
+                inputOptions: inputOptions,
+                inputValue:value['type'],
+                inputValidator: (value) => {
+                  if (!value) {
+                    return 'You need to choose Redaction Type'
+                  }else{
+                    return "";
+                  }
+                }
+              }).then((result) => {
+                console.log("value",result)
+                this.redactionTypes[index]['type']=result.value;
+                // this.redactionTypes.push({
+                //   id: annotations[0]['Sw'],
+                //   type: result.value
+                // })
+              });
+            },
+          }
+        ])
         console.log("annotation popup ", instance.annotationPopup.getItems())
 
         /* ---------------------------------------------------------------------------------------------- */
@@ -190,14 +233,14 @@ export class FileComponent implements OnInit {
         })
         */
         annotManager.on('annotationSelected', (annotationsList) => {
-          console.log("annoation added ", annotationsList)
+          console.log("annoation selected ", annotationsList)
+          this.lastSelected = {}
+          if(annotationsList)
+          this.lastSelected = annotationsList[0]
         })
         annotManager.on('annotationChanged', (annotations, action) => {
           if (action == 'add' && annotations[0]['Subject'] == 'Redact') {
-            let inputOptions = {
-              "PPD":"PPD",
-              "CCI":"CCI"
-            }
+            
             Swal.fire({
               title: 'Select Redaction Type',
               input: 'radio',
@@ -216,6 +259,7 @@ export class FileComponent implements OnInit {
                 id: annotations[0]['Sw'],
                 type: result.value
               })
+              console.log("this.redactionTypes",this.redactionTypes)
             });
             
             
