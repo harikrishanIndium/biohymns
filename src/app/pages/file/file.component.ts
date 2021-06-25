@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { RepositoryService } from '../../service/repository.service';
 import * as _ from 'lodash';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
+import { saveAs } from 'file-saver';
 const inputOptions = {
   "PPD":"PPD",
   "CCI":"CCI"
@@ -197,11 +198,20 @@ export class FileComponent implements OnInit {
                 results = _.merge(_.keyBy(results, 'id'), _.keyBy(thys.redactionTypes, 'id'))
                 thys.redactionResults = results;
                 let data = {
-                  'file_id':thys.selectedFile['id'],
+                  'id':thys.selectedFile['id'],
                   'file':thys.selectedFile['file'],
                   'redactArray':_.map(thys.redactionResults)
                 }
+                let body = new URLSearchParams();
+                body.set('id', thys.selectedFile['id']);
+                body.set('file', thys.selectedFile['file']);
+                body.set('redactArray',JSON.stringify(_.map(thys.redactionResults)));
+
                 console.log("data ", data)
+                thys.service.download(data).subscribe(res =>{
+                  console.log("res", res)
+                  saveAs(res.body);
+                })
               }
             },
 
