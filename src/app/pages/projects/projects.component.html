@@ -8,7 +8,7 @@
     </div>
 
   </div>
-  
+
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 col-lg-10 offset-lg-1">
 
     <!-- Position Column -->
@@ -46,7 +46,7 @@
 
 <div class="col-lg-12 p-1 row" *ngIf="projectView">
   <div class="col-lg-11">
-    <h3>Project > {{selectedProject.project_name}}</h3> 
+    <h3>Project > {{selectedProject.project_name}}</h3>
   </div>
   <div class="col-lg-1">
     <button mat-mini-fab color="primary" (click)="closeProjectView()">
@@ -93,7 +93,7 @@
       <tr mat-header-row *matHeaderRowDef="filesDisplayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: filesDisplayedColumns;"></tr>
     </table>
-   
+
   </div>
   <!-- add multiple project end -->
 
@@ -102,13 +102,18 @@
   <div class="modal shadow" id="myModal" *ngIf="croppopup" style="display: block!important;">
     <div class="modal-dialog ">
       <div class="modal-content">
-        
+       
         <div class="modal-body">
           <div class="form-group row">
             <div class="col-12 text-center">
+              <picture>
+                <source  srcset="../assets/images/download.png">
+                <img mat-card-image src="" alt="Photo of a Shiba Inu" width="20%">
+              </picture>
               <div class="file-input-container mt-2">
                 <label>
-                  <input type="file"  mat-stroked-button  #fileInput multiple (change)="fileSelected($event)" accept="application/pdf,text/plain" />
+                  <input type="file" mat-stroked-button #fileInput multiple (change)="fileSelected($event)"
+                    accept="application/pdf,text/plain" />
                   Add Files
                 </label>
               </div>
@@ -135,7 +140,7 @@
           </div>
           <div class="form-group row">
             <div class="col-12 text-center mt-4">
-              <button  mat-stroked-button  class="btn btn-success mr-2" (click)="uploadfunction()">upload All</button>
+              <button mat-stroked-button class="btn btn-success mr-2" (click)="uploadfunction()">upload All</button>
               <button mat-stroked-button class="btn btn-danger mr-2" (click)="cancel()">cancel</button>
             </div>
           </div>
@@ -160,7 +165,7 @@
   </div>
   <div class="col-lg-12">&nbsp;</div>
   <div class="col-lg-12 row">
-    <app-file [selectedFile]="selectedFile" ></app-file>
+    <app-file [selectedFile]="selectedFile"></app-file>
   </div>
 </div>
 
@@ -177,7 +182,7 @@
     <div class="col-12 text-center mb-3">
       <button mat-stroked-button class="btn btn-success mr-2" (click)="createProject()">Create</button>
       <button mat-stroked-button class="btn btn-danger mr-2" (click)="cancelProject()">Cancel</button>
-     
+
     </div>
   </div>
 </mat-card>
