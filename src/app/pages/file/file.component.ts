@@ -6,7 +6,11 @@ import { environment } from 'src/environments/environment';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RepositoryService } from '../../service/repository.service';
 import * as _ from 'lodash';
-
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+const inputOptions = {
+  "PPD":"PPD",
+  "CCI":"CCI"
+}
 @Component({
   selector: 'app-file',
   templateUrl: './file.component.html',
@@ -18,15 +22,13 @@ export class FileComponent implements OnInit {
   @Input('selectedFile') selectedFile: any;
   constructor(
     private route: ActivatedRoute,
-    private service: RepositoryService,
-    public dialog: MatDialog,
-    private modalService: NgbModal
+    private service: RepositoryService
   ) { }
   redactionResults: any = [];
   redactionTypes: any = [];
+  lastSelected:any;
+  
 
-  closeResult: string = '';
-  testvar: string = 'PPD'
   ngOnInit(): void {
     let path = this.route.snapshot.url;
     let path2 = path[1].toString();
@@ -39,36 +41,13 @@ export class FileComponent implements OnInit {
 
   }
   ngOnChanges(changes: SimpleChanges) {
-    console.log("2222r")
-    console.log("changes", this.selectedFile)
     if (this.selectedFile) {
       setTimeout(() => {
         this.showPDF();
       }, 1000)
     }
   }
-  open(content) {
-    console.log("opening")
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', backdrop: false }).result.then((result) => {
-      console.log("result ", this.testvar)
-      this.closeResult = `Closed with: ${result}`;
-      console.log("closeResult", this.closeResult)
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      console.log("closeResult", this.closeResult)
 
-    });
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
   ngAfterViewInit() {
 
     // this.showPDF();
@@ -115,7 +94,46 @@ export class FileComponent implements OnInit {
           { dataElement: "textRedactToolButton" },
         ])
         instance.annotationPopup.update([
-          { dataElement: "annotationDeleteButton" }
+          { dataElement: "annotationDeleteButton" },
+          {
+            type: 'actionButton',
+            img:"icon-tool-redaction-inline",
+            title:'Change Redaction Type',
+            onClick: () => {
+              console.log(this.lastSelected)
+              console.log (this.redactionTypes,this.redactionTypes,this.lastSelected['Sw'])
+              let index = "";
+              let value = {};
+              _.each (this.redactionTypes, (obj,key)=>{
+                console.log(obj,key)
+                if(obj['id']==this.lastSelected['Sw']){
+                  index = key;
+                  value = obj;
+                }
+              })
+              Swal.fire({
+                title: 'Change Redaction Type',
+                input: 'radio',
+                allowOutsideClick: false,
+                inputOptions: inputOptions,
+                inputValue:value['type'],
+                inputValidator: (value) => {
+                  if (!value) {
+                    return 'You need to choose Redaction Type'
+                  }else{
+                    return "";
+                  }
+                }
+              }).then((result) => {
+                console.log("value",result)
+                this.redactionTypes[index]['type']=result.value;
+                // this.redactionTypes.push({
+                //   id: annotations[0]['Sw'],
+                //   type: result.value
+                // })
+              });
+            },
+          }
         ])
         console.log("annotation popup ", instance.annotationPopup.getItems())
 
@@ -127,8 +145,6 @@ export class FileComponent implements OnInit {
 
         /* left nav */
         instance.setHeaderItems(function (header) {
-          // console.log("header",header)
-          // console.log("header",header.getHeader('toolbarGroup-Edit').getItems())
           header.getHeader('default').update([
             {
               type: 'toggleElementButton',
@@ -166,8 +182,6 @@ export class FileComponent implements OnInit {
             {
               type: "actionButton", img: "icon-header-download",
               onClick: () => {
-                //  annotHistoryManager.undo(); 
-                console.log(thys.selectedFile)
                 const redactionList = annotManager.getAnnotationsList().filter(annot => annot instanceof Annotations.RedactionAnnotation);
                 let results: any = [];
                 redactionList.map(dat => {
@@ -182,9 +196,8 @@ export class FileComponent implements OnInit {
                 })
                 results = _.merge(_.keyBy(results, 'id'), _.keyBy(thys.redactionTypes, 'id'))
                 thys.redactionResults = results;
-                console.log("results ", thys.redactionResults)
                 let data = {
-                  'id':thys.selectedFile['id'],
+                  'file_id':thys.selectedFile['id'],
                   'file':thys.selectedFile['file'],
                   'redactArray':_.map(thys.redactionResults)
                 }
@@ -194,7 +207,7 @@ export class FileComponent implements OnInit {
 
           ])
         });
-
+        /* username 
         annotManager.setAnnotationDisplayAuthorMap((annotation) => {
           console.log("annotation ", annotation)
 
@@ -204,6 +217,7 @@ export class FileComponent implements OnInit {
             return 'sdfas';
           }
         });
+        */
 
         /* user defined redaction
 
@@ -218,72 +232,42 @@ export class FileComponent implements OnInit {
           annotManager.addAnnotations(redactAnnotations);
         })
         */
-        docViewer.on('documentLoaded', () => {
-
-          console.log("cc", docViewer.getPageHeight(1))
-          console.log("cc", docViewer.getPageWidth(1))
-        });
-        console.log("annotation popup", instance.annotationPopup.getItems())
         annotManager.on('annotationSelected', (annotationsList) => {
-          console.log("annoation added ", annotationsList)
+          console.log("annoation selected ", annotationsList)
+          this.lastSelected = {}
+          if(annotationsList)
+          this.lastSelected = annotationsList[0]
         })
         annotManager.on('annotationChanged', (annotations, action) => {
           if (action == 'add' && annotations[0]['Subject'] == 'Redact') {
-            let type = ""
-            console.log(annotations)
-            if (confirm("Does this selection contain PPD?")==true)
-              type = "PPD"//console.log("PPD")
-            else
-              type = "CCI"//console.log("cci")
-            this.redactionTypes.push({
-              id: annotations[0]['Sw'],
-              type: type
-            })
+            
+            Swal.fire({
+              title: 'Select Redaction Type',
+              input: 'radio',
+              allowOutsideClick: false,
+              inputOptions: inputOptions,
+              inputValidator: (value) => {
+                if (!value) {
+                  return 'You need to choose Redaction Type'
+                }else{
+                  return "";
+                }
+              }
+            }).then((result) => {
+              console.log("value",result)
+              this.redactionTypes.push({
+                id: annotations[0]['Sw'],
+                type: result.value
+              })
+              console.log("this.redactionTypes",this.redactionTypes)
+            });
+            
+            
 
             // this.modalService.open(this.content)
           }
         });
-
       });
-
-  }
-  url: any;
-  input: any
-  onFileChanged(event: any) {
-    var fileToRead = event.target.files[0];;
-
-    var reader = new FileReader();
-    reader.readAsDataURL(fileToRead);
-
-    // attach event, that will be fired, when read is end
-    reader.onload = (_event) => {
-      this.url = reader.result;
-      this.showPDF();
-
-    }
-    // start reading a loaded file
-    reader.readAsText(fileToRead);
   }
 }
-function base64ToBlob(input: any): string | File | Blob | import("@pdftron/webviewer").CoreControls.Document | import("@pdftron/webviewer").PDFNet.PDFDoc {
-  throw new Error('Function not implemented.');
-}
 
-@Component({
-  selector: 'redaction-type',
-  templateUrl: 'redaction-type.component.html',
-  styles: ['.mat-radio-button ~ .mat-radio-button {margin-left: 16px;}']
-})
-export class RedactionTypeComponent {
-
-  constructor(
-    public dialogRef1: MatDialogRef<RedactionTypeComponent>,
-    // @Inject(MAT_DIALOG_DATA) public data: any
-  ) { }
-  onNoClick(): void {
-    console.log("closeing ", this.dialogRef1)
-    this.dialogRef1.close()
-    alert("colort")
-  }
-
-}
