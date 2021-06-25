@@ -181,4 +181,7 @@ export class RepositoryService {
     return this.http.post(path, requesdata)
   }
   //project create api end
+  download(data){
+    return this.http.post(environment.apiEndPoint + "redaction/",data,{observe: 'response', responseType: 'blob'});
+  }
 }
