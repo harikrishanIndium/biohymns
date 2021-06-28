@@ -2,8 +2,8 @@
 import { AfterViewInit, Component, ViewChild, ElementRef, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
-import{ MatPaginator} from'@angular/material/paginator';
-import {MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { FileUploader, FileLikeObject } from 'ng2-file-upload';
 import * as _ from 'lodash';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -38,6 +38,7 @@ export class ProjectsComponent implements AfterViewInit {
   listOfProjectView: boolean = true;
   projectView: boolean = false;
   selectedProject: any;
+  selectedid: any;
   uploadFileSection: boolean = false;
   addlistOfProjectView: boolean = false;
   croppopup: boolean = false;
@@ -136,6 +137,12 @@ export class ProjectsComponent implements AfterViewInit {
     // this.router.navigateByUrl("/manual")
 
   }
+  deleteFile(id) {
+    this.service.deleteFiles(id).subscribe(data => {
+      this.viewProjectModel(this.selectedProject);
+    });
+
+  }
   closeFileView() {
     this.projectView = true;
     this.fileView = false;
@@ -164,7 +171,7 @@ export class ProjectsComponent implements AfterViewInit {
   //project create pai end
 
   // completeItem = (item: FileQueueObject, response: any) => {
-   
+
   //   //this.onCompleteItem.emit({ item, response });
   //   console.log(item);
   // }
@@ -182,7 +189,7 @@ export class ProjectsComponent implements AfterViewInit {
       event.target.value = '';
 
     }
-    console.log("1111111111111",this.completeItem)
+    console.log("1111111111111", this.completeItem)
   }
   addToQueue() {
     const fileBrowser = this.fileInput.nativeElement;

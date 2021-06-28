@@ -87,6 +87,9 @@
           <button mat-mini-fab color="primary" (click)="editFile(element.file_id)">
             <mat-icon>edit</mat-icon>
           </button>
+          <button mat-mini-fab color="primary" class="ml-2" (click)="deleteFile(element.file_id)">
+            <mat-icon>delete</mat-icon>
+          </button>
         </td>
       </ng-container>
 
@@ -107,7 +110,7 @@
           <div class="form-group row">
             <div class="col-12 text-center">
               <picture>
-                <source  srcset="../assets/images/download.png">
+                <source  srcset="../assets/images/download.png" width="20%">
                 <img mat-card-image src="" alt="Photo of a Shiba Inu" width="20%">
               </picture>
               <div class="file-input-container mt-2">

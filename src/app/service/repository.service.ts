@@ -97,7 +97,7 @@ export class RepositoryService {
         if (event.type === HttpEventType.UploadProgress) {
           this._uploadProgress(queueObj, event);
         } else if (event instanceof HttpResponse) {
-         
+
         }
       },
       (err: HttpErrorResponse) => {
@@ -161,6 +161,14 @@ export class RepositoryService {
   }
   //getall files end
 
+  //delete file start
+  deleteFiles(id): Observable<any> {
+    let path = environment.apiEndPoint + "file_api/?id=" + id
+    return this.http.delete(path)
+
+  }
+  //delete file end
+
   //file create start
   postFile(requestdata: any): Observable<any> {
     let path = environment.apiEndPoint + "file_api/"
@@ -181,7 +189,7 @@ export class RepositoryService {
     return this.http.post(path, requesdata)
   }
   //project create api end
-  download(data){
-    return this.http.post(environment.apiEndPoint + "redaction/",data,{observe: 'response', responseType: 'blob'});
+  download(data) {
+    return this.http.post(environment.apiEndPoint + "redaction/", data, { observe: 'response', responseType: 'blob' });
   }
 }
