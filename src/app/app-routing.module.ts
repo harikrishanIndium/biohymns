@@ -10,6 +10,9 @@ import { PdflibComponent } from './pdflib/pdflib.component';
 import { VairaManualComponent } from './vaira-manual/vaira-manual.component';
 import { FileUploadComponent } from './pages/file-upload/file-upload.component';
 import { FileComponent } from './pages/file/file.component';
+import { ProjectComponent } from './super-admin/project/project.component';
+import { UserComponent } from './super-admin/user/user.component';
+import { UserLogsComponent } from './super-admin/user-logs/user-logs.component';
 const routes: Routes = [
   {
     path: 'old',
@@ -20,14 +23,14 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path:'',
+    path: '',
     component: MainLayoutComponent,
-    children:[
+    children: [
       {
         path: 'manual',
         component: ManualComponent
       },
-     
+
       {
         path: 'projects',
         component: ProjectsComponent
@@ -41,17 +44,31 @@ const routes: Routes = [
         component: DashboardComponent
       },
       {
-        path:"sample",
+        path: "sample",
         component: PdflibComponent
       },
       {
-        path:"file-upload",
+        path: "file-upload",
         component: FileUploadComponent
       },
       {
-        path:"redact-file/:id",
+        path: "redact-file/:id",
         component: FileComponent
-      }
+      },
+      //super-admin start
+      {
+        path: "project/:id",
+        component: ProjectComponent
+      },
+      // {
+      //   path: "superadmin/user",
+      //   component: UserComponent
+      // },
+      // {
+      //   path: "superadmin/userlogs",
+      //   component: UserLogsComponent
+      // }
+      //super-admin end
     ]
   },
 ];

@@ -1,0 +1,287 @@
+<div class="col-lg-12 p-1" *ngIf="superdiv">
+  <div class="col-lg-12 row mt-4 mb-3">
+    <div class="col-lg-10 ">
+      <h4>List of Projects</h4>
+    </div>
+    <div class="col-lg-2">
+      <button mat-stroked-button color="primary" (click)="showUploadfileSection()">Add
+        Project</button>
+
+    </div>
+
+  </div>
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 col-lg-10 offset-lg-1">
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="Id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="Project">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.project_name}} </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="Assigned">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Assigned </th>
+      <td mat-cell *matCellDef="let element"> {{element.assign_name}} </td>
+    </ng-container>
+    <ng-container matColumnDef="Assigned Date">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+      <td mat-cell *matCellDef="let element"> {{element.assign_date}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Action" *ngIf="!editbtn">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-mini-fab color="primary">
+          <mat-icon (click)="open(element)">zoom_out_map</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" class="ml-2">
+          <mat-icon (click)="edit(element)">edit</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" class="ml-2">
+          <mat-icon (click)="delete(element)">delete</mat-icon>
+        </button>
+      </td>
+
+    </ng-container>
+    <!-- admin edit menus start -->
+    <ng-container matColumnDef="Action" *ngIf="editbtn">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-mini-fab color="primary">
+          <mat-icon (click)="open(element)">zoom_out_map</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" class="ml-2">
+          <mat-icon (click)="editadmin(element)">edit</mat-icon>
+        </button>
+
+      </td>
+
+    </ng-container>
+    <!-- admin edit menus end -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</div>
+
+
+
+
+<!-- create project start -->
+<div class="modal shadow" id="myModal" *ngIf="croppopup" style="display: block!important;">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="form-group row">
+          <div class="col-12 text-center">
+
+            <h3>Create Project</h3>
+            <form>
+              <p>
+                <mat-form-field>
+                  <input matInput placeholder="Project Name" id="firstname" [(ngModel)]="project.project_name"
+                    name="firstname">
+                </mat-form-field>
+              </p>
+              <mat-form-field>
+                <mat-select name="admin" [(value)]="project.assign_name" placeholder="Select Admin">
+                  <mat-option [value]="'Jamesh'">Jamesh</mat-option>
+                  <mat-option [value]="'Sandy'">Sandy</mat-option>
+                  <mat-option [value]="'Jack'">Jack</mat-option>
+                  <mat-option [value]="'Millan'">Millan</mat-option>
+                  <mat-option [value]="'Bosly'">Bosly</mat-option>
+                  <mat-option [value]="'Naren'">Naren</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <p>
+                <mat-form-field class="mt-4">
+                  <div>
+                    <mat-toolbar>
+                      <input matInput [(ngModel)]="project.file" readonly name="name" placeholder="Choose file" />
+                      <button mat-flat-button color="primary" (click)="fileInput.click()">
+                        Browse File
+                      </button>
+                    </mat-toolbar>
+
+                    <input type="file" #fileInput id="uploadFile" (change)="uploadFileEvt($event)" name="uploadFile"
+                      accept="application/pdf,text/plain" />
+                  </div>
+                </mat-form-field>
+              </p>
+              <p>
+                <button mat-stroked-button class="btn btn-success mr-2" (click)="create()">Create</button>
+                <button mat-stroked-button class="btn btn-danger mr-2" (click)="cancel()">Cancel</button>
+
+              </p>
+            </form>
+
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-12 text-center mt-4">
+            <!-- <button mat-stroked-button class="btn btn-success mr-2" (click)="uploadfunction()">upload All</button>
+              <button mat-stroked-button class="btn btn-danger mr-2" (click)="cancel()">cancel</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- create project end -->
+
+<!-- edit start -->
+<mat-card class="example-card  mt-4 text-center" *ngIf="editdiv">
+  <!-- <mat-form-field class="mt-4"> -->
+  <div class="form-group row">
+    <div class="col-12 text-center">
+      <h2>Edit Project</h2>
+      <p>
+        <mat-form-field>
+          <input matInput id="firstname" [(ngModel)]="project.project_name" name="firstname">
+        </mat-form-field>
+      </p>
+      <mat-form-field>
+        <mat-select name="admin" [(value)]="project.assign_name">
+          <mat-option [value]="'Jamesh'">Jamesh</mat-option>
+          <mat-option [value]="'Sandy'">Sandy</mat-option>
+          <mat-option [value]="'Jack'">Jack</mat-option>
+          <mat-option [value]="'Millan'">Millan</mat-option>
+          <mat-option [value]="'Bosly'">Bosly</mat-option>
+          <mat-option [value]="'Naren'">Naren</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <p>
+        <mat-form-field class="mt-4">
+          <div>
+            <mat-toolbar>
+              <input matInput [(ngModel)]="project.file" readonly name="name" />
+              <button mat-flat-button color="primary" (click)="fileInput.click()">
+                Browse File
+              </button>
+            </mat-toolbar>
+
+            <input type="file" #fileInput id="uploadFile" (change)="uploadFileEvt($event)" name="uploadFile"
+              accept="application/pdf,text/plain" />
+          </div>
+        </mat-form-field>
+      </p>
+      <p>
+        <button mat-stroked-button class="btn btn-success mr-2" (click)="create()">Update</button>
+        <button mat-stroked-button class="btn btn-danger mr-2" (click)="upcancel()">Cancel</button>
+
+      </p>
+    </div>
+  </div>
+
+  <!-- </mat-form-field> -->
+  <!-- <div class="mt-2"> -->
+  <!-- <button class="btn btn-success mb-4" *ngIf="redactbtn" (click)="redact()">Redact</button> -->
+  <!-- </div> -->
+</mat-card>
+<!-- edit end -->
+
+<!-- admin edit start -->
+<mat-card class="example-card  mt-4 text-center" *ngIf="admindiv">
+  <!-- <mat-form-field class="mt-4"> -->
+  <div class="form-group row">
+    <div class="col-12 text-center">
+      <h2>Edit Project</h2>
+      <p>
+        <mat-form-field>
+          <input matInput id="firstname" readonly [(ngModel)]="project.project_name" name="firstname">
+        </mat-form-field>
+      </p>
+
+      <mat-form-field>
+        <mat-select placeholder="Select users" [(value)]="selectedToppings" multiple>
+          <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <p>
+        <mat-form-field class="mt-4">
+          <div>
+            <mat-toolbar>
+              <input matInput [(ngModel)]="project.file" readonly name="name" />
+              <button mat-flat-button color="primary" (click)="fileInput.click()">
+                Browse File
+              </button>
+            </mat-toolbar>
+
+            <input type="file" #fileInput id="uploadFile" (change)="uploadFileEvt($event)" name="uploadFile"
+              accept="application/pdf,text/plain" />
+          </div>
+        </mat-form-field>
+      </p>
+      <p>
+        <button mat-stroked-button class="btn btn-success mr-2" (click)="create()">Update</button>
+        <button mat-stroked-button class="btn btn-danger mr-2" (click)="upcancel()">Cancel</button>
+
+      </p>
+    </div>
+  </div>
+</mat-card>
+<!-- admin edit end -->
+
+<!-- addmin upload file  start -->
+<div class="modal shadow" id="myModal" *ngIf="adminupload" style="display: block!important;">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="form-group row">
+          <div class="col-12 text-center">
+
+            <h3>Upload file</h3>
+            <form>
+              <p>
+                <mat-form-field class="mt-4">
+                  <div>
+                    <mat-toolbar>
+                      <input matInput [(ngModel)]="project.file" readonly name="name" placeholder="Choose file" />
+                      <button mat-flat-button color="primary" (click)="fileInput.click()">
+                        Browse File
+                      </button>
+                    </mat-toolbar>
+
+                    <input type="file" #fileInput id="uploadFile" (change)="uploadFileEvt($event)" name="uploadFile"
+                      accept="application/pdf,text/plain" />
+                  </div>
+                </mat-form-field>
+              </p>
+
+
+              <mat-form-field>
+                <mat-select placeholder="Select users" [(value)]="selectedToppings" multiple>
+                  <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <p>
+                <button mat-stroked-button class="btn btn-success mr-2" (click)="create()">Create</button>
+                <button mat-stroked-button class="btn btn-danger mr-2" (click)="cancel()">Cancel</button>
+
+              </p>
+            </form>
+
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-12 text-center mt-4">
+            <!-- <button mat-stroked-button class="btn btn-success mr-2" (click)="uploadfunction()">upload All</button>
+              <button mat-stroked-button class="btn btn-danger mr-2" (click)="cancel()">cancel</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- addmin upload file end -->

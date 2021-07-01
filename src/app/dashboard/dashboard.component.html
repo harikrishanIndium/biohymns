@@ -1,5 +1,17 @@
 <app-sidebar></app-sidebar>
-<div class="col-lg-12 row  mar-box">
+<div class="col-lg-12 row " *ngIf="back">
+    <div class="col-lg-11">
+        {{name}}
+    </div>
+    <div class="col-lg-1">
+      <button mat-mini-fab color="primary" (click)="closeProjectView()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </div>
+</div>
+
+
+<div class="col-lg-12 row  mar-box" *ngIf="user">
     <div class="col-lg-12">&nbsp;</div>
     <div class="col-lg-4 offset-lg-2">
         <mat-card class="">
@@ -29,3 +41,148 @@
             </mat-card-actions>
         </mat-card>
     </div>
+</div>
+
+<!-- super admin start -->
+<div class="col-lg-12 row  mar-box" *ngIf="superadmin">
+    <div class="col-lg-12">&nbsp;</div>
+    <div class="col-lg-3 offset-lg-2">
+        <mat-card class="">
+            <mat-card-header>
+                <div mat-card-avatar class="">
+                    <mat-icon>domain</mat-icon>
+                </div>
+                <mat-card-title>Projects</mat-card-title>
+            </mat-card-header>
+            <mat-card-actions>
+                <button mat-button (click)="adminProjects('projects')">View Projects</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+    <div class="col-lg-3">
+        <mat-card class="">
+            <mat-card-header>
+                <div mat-card-avatar class="">
+                    <mat-icon>picture_as_pdf</mat-icon>
+                </div>
+                <mat-card-title>User</mat-card-title>
+               
+            </mat-card-header>
+            <mat-card-actions>
+                <button mat-button (click)="adminProjects('user')">View Users</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+    <div class="col-lg-3">
+        <mat-card class="">
+            <mat-card-header>
+                <div mat-card-avatar class="">
+                    <mat-icon>picture_as_pdf</mat-icon>
+                </div>
+                <mat-card-title>User Logs</mat-card-title>
+               
+            </mat-card-header>
+            <mat-card-actions>
+                <button mat-button (click)="adminProjects('logs')">View Logs</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>
+<!-- super admin end -->
+
+<!-- admin start -->
+<div class="col-lg-12 row  mar-box" *ngIf="admin">
+    <div class="col-lg-12">&nbsp;</div>
+    <div class="col-lg-3 offset-lg-2">
+        <mat-card class="">
+            <mat-card-header>
+                <div mat-card-avatar class="">
+                    <mat-icon>domain</mat-icon>
+                </div>
+                <mat-card-title>Projects</mat-card-title>
+            </mat-card-header>
+            <mat-card-actions>
+                <button mat-button (click)="adminProjects('projects')">View Projects</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+    <div class="col-lg-3">
+        <mat-card class="">
+            <mat-card-header>
+                <div mat-card-avatar class="">
+                    <mat-icon>picture_as_pdf</mat-icon>
+                </div>
+                <mat-card-title>User</mat-card-title>
+               
+            </mat-card-header>
+            <mat-card-actions>
+                <button mat-button >View Users</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+    <div class="col-lg-3">
+        <mat-card class="">
+            <mat-card-header>
+                <div mat-card-avatar class="">
+                    <mat-icon>picture_as_pdf</mat-icon>
+                </div>
+                <mat-card-title>User Logs</mat-card-title>
+               
+            </mat-card-header>
+            <mat-card-actions>
+                <button mat-button>View Logs</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>
+<!-- admin end -->
+
+<!-- author start -->
+<div class="col-lg-12 row  mar-box" *ngIf="author">
+    <div class="col-lg-12">&nbsp;</div>
+    <div class="col-lg-2 ">
+    </div>
+    <div class="col-lg-4 offset-lg-2">
+        <mat-card class="">
+            <mat-card-header>
+                <div mat-card-avatar class="">
+                    <mat-icon>domain</mat-icon>
+                </div>
+                <mat-card-title>Projects</mat-card-title>
+            </mat-card-header>
+            <mat-card-actions>
+                <button mat-button (click)="gotToProjects('projects')">View Projects</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+    
+ 
+</div>
+<!-- author end -->
+
+
+
+
+
+<!-- radio button start -->
+<div class="col-lg-12 row  mar-box" *ngIf="radio">
+    <div class="col-lg-12">&nbsp;</div>
+    <div class="col-lg-8 offset-lg-2">
+        <mat-card class="">
+            <ng-container >
+              
+                <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group">
+                    <mat-radio-button class="example-radio-button ml-5" *ngFor="let section of someName" [value]="section"
+                        (change)="radioChange(section.name)">
+                        {{section.name}}</mat-radio-button>
+                </mat-radio-group>
+                <br>
+                <br>
+            </ng-container>
+        </mat-card>
+    </div>
+
+</div>
+
+
+<!-- radio button end -->

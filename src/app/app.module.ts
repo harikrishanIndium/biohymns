@@ -19,12 +19,18 @@ import { MaterialModule } from './shared/material.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PdflibModule } from './pdflib/pdflib.module';
 import { HttpClientModule } from "@angular/common/http";
+import { ProjectComponent } from './super-admin/project/project.component';
+import { UserComponent } from './super-admin/user/user.component';
+import { UserLogsComponent } from './super-admin/user-logs/user-logs.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
     MainLayoutComponent,
+    ProjectComponent,
+    UserComponent,
+    UserLogsComponent,
   ],
   imports: [
     BrowserModule,
