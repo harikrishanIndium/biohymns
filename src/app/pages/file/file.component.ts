@@ -182,6 +182,7 @@ export class FileComponent implements OnInit {
             { type: "spacer", hidden: ['mobile'] },
             {
               type: "actionButton", img: "icon-header-download",
+              title: "Redact and Download",
               onClick: () => {
                 const redactionList = annotManager.getAnnotationsList().filter(annot => annot instanceof Annotations.RedactionAnnotation);
                 let results: any = [];
@@ -196,22 +197,26 @@ export class FileComponent implements OnInit {
                   results.push(t)
                 })
                 results = _.merge(_.keyBy(results, 'id'), _.keyBy(thys.redactionTypes, 'id'))
+                results = _.pickBy(_.mapValues(results, (val) =>{
+                  if(val['redactions']) return val;
+                }))
                 thys.redactionResults = results;
                 let data = {
                   'id':thys.selectedFile['id'],
                   'file':thys.selectedFile['file'],
                   'redactArray':_.map(thys.redactionResults)
                 }
-                let body = new URLSearchParams();
-                body.set('id', thys.selectedFile['id']);
-                body.set('file', thys.selectedFile['file']);
-                body.set('redactArray',JSON.stringify(_.map(thys.redactionResults)));
-
-                console.log("data ", data)
-                thys.service.download(data).subscribe(res =>{
-                  console.log("res", res)
-                  saveAs(res.body);
-                })
+                if(data['redactArray'].length>0){
+                  thys.service.download(data).subscribe(res =>{
+                    saveAs(res.body);
+                  })
+                }else {
+                  Swal.fire(
+                    'Redaction Completed?'+data['redactArray'].length,
+                    'Please select some part to Redact',
+                    'question'
+                  )
+                }
               }
             },
 

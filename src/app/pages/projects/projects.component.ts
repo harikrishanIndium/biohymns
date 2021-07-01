@@ -1,4 +1,3 @@
-
 import { AfterViewInit, Component, ViewChild, ElementRef, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
@@ -9,6 +8,7 @@ import * as _ from 'lodash';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FileQueueObject, RepositoryService } from '../../service/repository.service';
 import { Observable } from 'rxjs';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 
 
@@ -138,9 +138,24 @@ export class ProjectsComponent implements AfterViewInit {
 
   }
   deleteFile(id) {
-    this.service.deleteFiles(id).subscribe(data => {
-      this.viewProjectModel(this.selectedProject);
+    Swal.fire({  
+      title: 'Do you want to remove this file?',  
+      // showDenyButton: true, 
+      showCancelButton: true,  
+      confirmButtonText: `Yes`,  
+      denyButtonText: `No`,
+    }).then((result) => {  
+      /* Read more about isConfirmed, isDenied below */  
+        if (result.isConfirmed) {    
+          this.service.deleteFiles(id).subscribe(data => {
+            this.viewProjectModel(this.selectedProject);
+            Swal.fire('Deleted!', '', 'success')  
+          });
+        } else if (result.isDenied) {    
+          // Swal.fire('Changes are not saved', '', 'info')  
+       }
     });
+   
 
   }
   closeFileView() {
@@ -204,7 +219,9 @@ export class ProjectsComponent implements AfterViewInit {
     formData.append("project_id", this.selectedProject['id']);
     this.service.postFile(formData).subscribe(data => {
       console.log("data", data);
-      alert("file added successfully");
+      // alert("file added successfully");
+      Swal.fire('File Added!', '', 'success')  
+
       this.cancel();
     })
   }

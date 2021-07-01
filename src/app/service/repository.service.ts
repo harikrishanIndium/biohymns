@@ -21,7 +21,6 @@ export class FileQueueObject {
   public progress: number = 0;
   public request!: Subscription; async: any;
   public response: HttpResponse<any> | HttpErrorResponse | any;
-
   constructor(file: any) {
     this.file = file;
   }
@@ -41,6 +40,7 @@ export class RepositoryService {
   private _queue!: BehaviorSubject<FileQueueObject[]>;
   private _files: FileQueueObject[] = [];
 
+  public userType:string='SuperAdmin';
 
   constructor(private router: Router, public http: HttpClient) {
     this._queue = <BehaviorSubject<FileQueueObject[]>>new BehaviorSubject(this._files);

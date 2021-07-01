@@ -10,7 +10,7 @@ import { RepositoryService } from '../service/repository.service';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private router: Router, private service: RepositoryService) { }
+  constructor(private router: Router, public service: RepositoryService) { }
   totalcount: any;
   filecount: any;
   //radio button start

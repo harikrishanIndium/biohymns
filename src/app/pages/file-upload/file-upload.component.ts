@@ -28,7 +28,7 @@ export class FileUploadComponent implements OnInit {
 
   redact() {
     const formData = new FormData();
-    this.project_id = 1;
+    this.project_id = 0;
     formData.append("file", this.filepath);
     formData.append("project_id", this.project_id);
     this.service.postFile(formData).subscribe(data => {
