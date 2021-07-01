@@ -20,11 +20,12 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { PdflibModule } from './pdflib/pdflib.module';
 import { HttpClientModule } from "@angular/common/http";
 
+
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
-    MainLayoutComponent,
+    MainLayoutComponent
   ],
   imports: [
     BrowserModule,

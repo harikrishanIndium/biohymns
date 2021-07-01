@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FileUploadModule } from 'ng2-file-upload';
 import { FileModule } from '../file/file.module';
 import { FileUploadsModule } from '../file-upload/file-upload.module'
+import { LogManagementModule } from '../log-management/log-management.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { FileUploadsModule } from '../file-upload/file-upload.module'
     MaterialModule,
     FileUploadModule,
     FileModule,
-    FileUploadsModule
+    FileUploadsModule,
+    LogManagementModule
   ],
   exports:[ProjectsComponent],
   schemas:[CUSTOM_ELEMENTS_SCHEMA]

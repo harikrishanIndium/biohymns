@@ -15,6 +15,7 @@ export class SidebarComponent implements OnInit,OnChanges {
   public pages = [
     {name: 'Dashboard', link:'dashboard', icon: 'dashboard'},
     {name: 'Projects', link:'projects', icon: 'domain'},
+    {name: 'Log', link:'log-management', icon: 'domain'},
     // {name: 'Files', link:'some-link', icon: 'send'},
   ]
 

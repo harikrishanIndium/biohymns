@@ -10,6 +10,7 @@ import { PdflibComponent } from './pdflib/pdflib.component';
 import { VairaManualComponent } from './vaira-manual/vaira-manual.component';
 import { FileUploadComponent } from './pages/file-upload/file-upload.component';
 import { FileComponent } from './pages/file/file.component';
+import { LogManagementComponent } from './pages/log-management/log-management.component';
 const routes: Routes = [
   {
     path: 'old',
@@ -51,6 +52,10 @@ const routes: Routes = [
       {
         path:"redact-file/:id",
         component: FileComponent
+      },
+      {
+        path:"log-management",
+        component: LogManagementComponent
       }
     ]
   },
