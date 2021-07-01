@@ -1,6 +1,19 @@
 <app-sidebar></app-sidebar>
+<div class="col-lg-12">
+    <label id="example-radio-group-label" class="col-lg-12">Select User Role</label>
+    <mat-radio-group aria-label="Select an User Type" [(ngModel)]="service.userType">
+        <mat-radio-button value="SuperAdmin">Super Admin</mat-radio-button>
+        <mat-radio-button value="Admin">Admin</mat-radio-button>
+        <mat-radio-button value="Author">Author</mat-radio-button>
+        <mat-radio-button value="Reviewer">Reviewer</mat-radio-button>
+        <mat-radio-button value="Approver">Approver</mat-radio-button>
+    </mat-radio-group>
+</div>
+
 <div class="col-lg-12 row  mar-box">
+
     <div class="col-lg-12">&nbsp;</div>
+    {{service.userType}}
     <div class="col-lg-4 offset-lg-2">
         <mat-card class="">
             <mat-card-header>

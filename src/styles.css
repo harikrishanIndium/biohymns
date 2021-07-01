@@ -10,3 +10,16 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
+.loaderimage {
+    position: absolute;
+    z-index: 9;
+    background: #fff;
+    height: 98vh;
+    top: 4;
+}
+
+.loaderimage img {
+    position: relative;
+    left: 40%;
+    top: 40%;
+}   
